@@ -1249,6 +1249,7 @@ public abstract class SimpleEditor extends JPanel {
 				// if probe option selected
 				if (event.getSource() == probe) {
 
+					// TODO: Review
 					// do nothing if editor is disabled
 					if (!enabled)
 						return;
@@ -1259,6 +1260,7 @@ public abstract class SimpleEditor extends JPanel {
 					// } catch (Exception e) {
 					// e.printStackTrace();
 					// }
+					doProbe();
 				}
 
 				// if watch option selected, ...
