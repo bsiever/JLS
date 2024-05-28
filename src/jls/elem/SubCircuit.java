@@ -601,6 +601,7 @@ public class SubCircuit extends LogicElement implements TriProp {
 	 * Dialog box to give the subcircuit a name within this circuit.
 	 */
 	private class SubCreate extends JDialog implements ActionListener {
+			private static final long serialVersionUID = 5323230584014437625L;
 			// properties
 			private JButton ok = new JButton("OK");
 			private JButton cancel = new JButton("Cancel");

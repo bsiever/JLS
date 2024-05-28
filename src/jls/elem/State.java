@@ -1288,6 +1288,7 @@ public class State {
 	 */
 	private class CreateTrans extends JDialog implements ActionListener {
 
+		private static final long serialVersionUID = 4734393855944710900L;
 		// properties
 		private Transition trans;
 		private State myState;
@@ -1671,6 +1672,7 @@ public class State {
 	 */
 	private class EditOutputs extends JDialog implements ActionListener {
 
+		private static final long serialVersionUID = -2747308146584143891L;
 		// properties
 		private JButton close = new JButton("close window");
 		private JList<Out> outList;

@@ -840,6 +840,7 @@ public class Register extends LogicElement {
 	 */
 	private class RegisterEdit extends JDialog implements ActionListener {
 		
+		private static final long serialVersionUID = 5796120706768702289L;
 		// properties
 		private JButton ok = new JButton("OK");
 		private JButton cancel = new JButton("Cancel");

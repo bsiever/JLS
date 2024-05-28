@@ -565,6 +565,7 @@ public final class TruthTable extends LogicElement implements Printable {
 	 */
 	private class TTEditor extends JDialog implements ActionListener {
 
+		private static final long serialVersionUID = -31330160286389657L;
 		// properties
 		private JTextField inputField = new JTextField(10);
 		private JTextField outputField = new JTextField(10);

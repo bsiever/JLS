@@ -777,6 +777,7 @@ public final class StateMachine extends LogicElement implements Printable {
 	private class StateEditor extends JDialog
 		implements ActionListener, MouseListener, MouseMotionListener {
 		
+		private static final long serialVersionUID = 3337341066898267727L;
 		// properties
 		private JPanel editArea;
 		private JLabel msgLabel = new JLabel("");
@@ -838,6 +839,8 @@ public final class StateMachine extends LogicElement implements Printable {
 			
 			// set up editing area
 			editArea = new JPanel() {
+				private static final long serialVersionUID = 8085987765672445183L;
+
 				public void paintComponent(Graphics g) {
 					super.paintComponent(g);
 					if (selrect != null) {
@@ -945,12 +948,14 @@ public final class StateMachine extends LogicElement implements Printable {
 
 			// set up new state key binding
 			Action newState = new AbstractAction() {
+				private static final long serialVersionUID = -590544735643039379L;
+
 				public void actionPerformed(ActionEvent event) {
 					
 					createNewState();
 				}
 			};
-			editArea.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_N,InputEvent.CTRL_MASK),"new state");
+			editArea.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_N,InputEvent.CTRL_DOWN_MASK),"new state");
 			editArea.getActionMap().put("new state", newState);
 
 			// set up window close listener to cancel element
@@ -1725,6 +1730,7 @@ public final class StateMachine extends LogicElement implements Printable {
 	 */
 	private class CreateState extends JDialog implements ActionListener {
 		
+		private static final long serialVersionUID = 1147150415029786813L;
 		private String name;
 		private JTextField nameField = new JTextField(10);
 		private JButton ok = new JButton("ok");

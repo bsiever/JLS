@@ -1,7 +1,6 @@
 package jls.elem;
 
 import jls.*;
-import jls.elem.Group.Entry;
 import jls.sim.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;

@@ -13,6 +13,7 @@ import javax.swing.*;
  */
 public final class Tutorial extends JDialog {
 	
+	private static final long serialVersionUID = -2274457919915229407L;
 	private final int width = 400;
 	private final int height = 500;
 

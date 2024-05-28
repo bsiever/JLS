@@ -408,50 +408,50 @@ public abstract class SimpleEditor extends JPanel {
 
 				// set up popup menus
 				probe.setToolTipText("watch activity on this wire during simulation");
-				probe.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,InputEvent.CTRL_MASK));
+				probe.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,InputEvent.CTRL_DOWN_MASK));
 				watch.setToolTipText("watch activity on this element during simulation");
-				watch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,InputEvent.CTRL_MASK));
+				watch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,InputEvent.CTRL_DOWN_MASK));
 				modify.setToolTipText("view/modify element details");
-				modify.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,InputEvent.CTRL_MASK));
+				modify.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,InputEvent.CTRL_DOWN_MASK));
 				timing.setToolTipText("change propagation delay or access time");
-				timing.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,InputEvent.CTRL_MASK));
+				timing.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,InputEvent.CTRL_DOWN_MASK));
 				view.setToolTipText("view current simulated value");
-				view.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_MASK));
+				view.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK));
 				cut.setToolTipText("cut all selected elements to clipboard");
-				cut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,InputEvent.CTRL_MASK));
+				cut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,InputEvent.CTRL_DOWN_MASK));
 				copy.setToolTipText("copy all selected elements to clipboard");
-				copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,InputEvent.CTRL_MASK));
+				copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,InputEvent.CTRL_DOWN_MASK));
 				delete.setToolTipText("delete all selected elements");
 				delete.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE,0));
 				lock.setToolTipText("make selected elements uneditable (cannot be undone)");
-				lock.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,InputEvent.CTRL_MASK));
+				lock.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L,InputEvent.CTRL_DOWN_MASK));
 
 				// TODO: Make an action for this.
 				//matchJump.setToolTipText("create the wire end to match this wire start");
-				//matchJump.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,InputEvent.CTRL_MASK));
+				//matchJump.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R,InputEvent.CTRL_DOWN_MASK));
 
 				connect.setToolTipText("create a new wire");
-				connect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,InputEvent.CTRL_MASK));
+				connect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,InputEvent.CTRL_DOWN_MASK));
 				newMenu.add(connect);
 
 				paste.setToolTipText("paste contents of clipboard");
-				paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,InputEvent.CTRL_MASK));
+				paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,InputEvent.CTRL_DOWN_MASK));
 				newMenu.add(paste);
 
 				selAll.setToolTipText("select all elements");
-				selAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,InputEvent.CTRL_MASK));
+				selAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,InputEvent.CTRL_DOWN_MASK));
 				newMenu.add(selAll);
 
 				close.setToolTipText("close this circuit");
-				close.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,InputEvent.CTRL_MASK));
+				close.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,InputEvent.CTRL_DOWN_MASK));
 				newMenu.add(close);
 
 				undo.setToolTipText("undo last modification");
-				undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,InputEvent.CTRL_MASK));
+				undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,InputEvent.CTRL_DOWN_MASK));
 				newMenu.add(undo);
 
 				redo.setToolTipText("redo last undo");
-				redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,InputEvent.CTRL_MASK));
+				redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y,InputEvent.CTRL_DOWN_MASK));
 				newMenu.add(redo);
 
 				makeElements();
@@ -465,7 +465,7 @@ public abstract class SimpleEditor extends JPanel {
 				view.addActionListener(this);
 				cut.addActionListener(this);
 				copy.addActionListener(this);
-				delete.addActionListener(this);
+				delete.addActionListener(this);	
 				lock.addActionListener(this);
 				undo.addActionListener(this);
 				redo.addActionListener(this);
@@ -478,10 +478,10 @@ public abstract class SimpleEditor extends JPanel {
 				flip.addActionListener(this);
 				matchJump.addActionListener(this);
 
+								
 				// set up ctrl-w (new wire / watch) key binding
 				Action ctrlw = new AbstractAction() {
 					public void actionPerformed(ActionEvent event) {
-
 						// do nothing if editor is disabled
 						if (!enabled)
 							return;
@@ -536,7 +536,7 @@ public abstract class SimpleEditor extends JPanel {
 						}
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_W,InputEvent.CTRL_MASK),"ctrlw");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_W,InputEvent.CTRL_DOWN_MASK),"ctrlw");
 				getActionMap().put("ctrlw", ctrlw);
 
 				// set up end wire key binding
@@ -603,7 +603,7 @@ public abstract class SimpleEditor extends JPanel {
 
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_MASK),"view");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_DOWN_MASK),"view");
 				getActionMap().put("view", see);
 
 				// set up modify key binding
@@ -621,7 +621,7 @@ public abstract class SimpleEditor extends JPanel {
 						doModify();
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_M,InputEvent.CTRL_MASK),"modify");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_M,InputEvent.CTRL_DOWN_MASK),"modify");
 				getActionMap().put("modify", modify);
 
 				// set up probe key binding
@@ -644,7 +644,7 @@ public abstract class SimpleEditor extends JPanel {
 						doProbe();
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_P,InputEvent.CTRL_MASK),"probe");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_P,InputEvent.CTRL_DOWN_MASK),"probe");
 				getActionMap().put("probe", probe);
 
 				// set up timing key binding
@@ -667,7 +667,7 @@ public abstract class SimpleEditor extends JPanel {
 						doTiming();
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_T,InputEvent.CTRL_MASK),"timing");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_T,InputEvent.CTRL_DOWN_MASK),"timing");
 				getActionMap().put("timing",timing);
 
 				// set up selectAll key binding
@@ -681,7 +681,7 @@ public abstract class SimpleEditor extends JPanel {
 						doSelectAll();
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_A,InputEvent.CTRL_MASK),"select all");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_A,InputEvent.CTRL_DOWN_MASK),"select all");
 				getActionMap().put("select all", selectAll);
 
 				// set up close window key binding
@@ -690,11 +690,12 @@ public abstract class SimpleEditor extends JPanel {
 						close();
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_E,InputEvent.CTRL_MASK),"close window");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_E,InputEvent.CTRL_DOWN_MASK),"close window");
 				getActionMap().put("close window", closeWin);
 
 				// set up delete key binding
 				Action deleteKey = new AbstractAction() {
+
 					public void actionPerformed(ActionEvent event) {
 						if (enabled) {
 							remove();
@@ -706,6 +707,8 @@ public abstract class SimpleEditor extends JPanel {
 					}
 				};
 				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE,0),"do delete");
+				// Added for macOS support
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE,0),"do delete");
 				getActionMap().put("do delete", deleteKey);
 
 				// set up cut key binding
@@ -721,7 +724,7 @@ public abstract class SimpleEditor extends JPanel {
 						}
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_X,InputEvent.CTRL_MASK),"do cut");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_X,InputEvent.CTRL_DOWN_MASK),"do cut");
 				getActionMap().put("do cut", cutKey);
 
 				// set up copy key binding
@@ -735,7 +738,7 @@ public abstract class SimpleEditor extends JPanel {
 						}
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_C,InputEvent.CTRL_MASK),"do copy");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_C,InputEvent.CTRL_DOWN_MASK),"do copy");
 				getActionMap().put("do copy", copyKey);
 
 				// set up paste key binding
@@ -751,7 +754,7 @@ public abstract class SimpleEditor extends JPanel {
 						}
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_V,InputEvent.CTRL_MASK),"do paste");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_V,InputEvent.CTRL_DOWN_MASK),"do paste");
 				getActionMap().put("do paste", pasteKey);
 
 				// set up undo key binding
@@ -763,7 +766,7 @@ public abstract class SimpleEditor extends JPanel {
 						}
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Z,InputEvent.CTRL_MASK),"do undo");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Z,InputEvent.CTRL_DOWN_MASK),"do undo");
 				getActionMap().put("do undo", undoKey);
 
 				// set up redo key binding
@@ -775,7 +778,7 @@ public abstract class SimpleEditor extends JPanel {
 						}
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Y,InputEvent.CTRL_MASK),"do redo");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Y,InputEvent.CTRL_DOWN_MASK),"do redo");
 				getActionMap().put("do redo", redoKey);
 
 				// set up lock key binding
@@ -805,7 +808,7 @@ public abstract class SimpleEditor extends JPanel {
 						}
 					}
 				};
-				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_L,InputEvent.CTRL_MASK),"do lock");
+				getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_L,InputEvent.CTRL_DOWN_MASK),"do lock");
 				getActionMap().put("do lock", lockKey);
 
 			} // end of constructor
@@ -1240,7 +1243,6 @@ public abstract class SimpleEditor extends JPanel {
 			 * @param event The event object for actions.
 			 */
 			public void actionPerformed(ActionEvent event) {
-
 				info.setForeground(Color.BLACK);
 				info.setText("");
 
@@ -1251,299 +1253,292 @@ public abstract class SimpleEditor extends JPanel {
 					if (!enabled)
 						return;
 
-					//			// draw all elements, selected ones last
-					//			try {
-					//				circuit.draw(g, selected, me);
-					//			} catch (Exception e) {
-					//				e.printStackTrace();
-					//			}
-
-					// if watch option selected, ...
-					if (event.getSource() == watch) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						// get the single item in the selected set
-						Element el = (Element)(selected.toArray()[0]);
-
-						// if its locked, don't change it
-						if (el.isUneditable())
-							return;
-
-						// remove if watched, add if not
-						if (el.isWatched()) {
-							el.setWatched(false);
-						}
-						else {
-							el.setWatched(true);
-						}
-						markChanged();
-
-						// clean up
-						clearSelected();
-						setState(State.idle);
-						repaint();
-						return;
-					}
-
-					// if view option selected, ...
-					if (event.getSource() == modify) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-						doModify();
-					}
-
-					// if change timing, then it must have timing info
-					if (event.getSource() == timing) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						doTiming();
-					}
-
-					// if view, then it must be a watchable element
-					if (event.getSource() == view) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						// get the single item in the selected set
-						Element el = (Element)(selected.toArray()[0]);
-
-						// ask element to display its current value
-						el.showCurrentValue(new Point(x,y));
-
-						// clean up
-						clearSelected();
-						setState(State.idle);
-						repaint();
-						return;
-					}
-
-					// if cut option selected, copy selected elements to clipboard,
-					// then delete those elements
-					if (event.getSource() == cut) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						// copy, then remove
-						copy();
-						remove();
-
-						// clean up
-						removeCoLinear();
-						clearSelected();
-						setState(State.idle);
-						repaint();
-						return;
-					}
-
-					// if copy option, copy selected elements to clipboard
-					if (event.getSource() == copy) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						copy();
-						clearSelected();
-						setState(State.idle);
-						repaint();
-						return;
-					}
-
-					// if delete option, delete selected elements
-					if (event.getSource() == delete) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						// remove
-						remove();
-						removeCoLinear();
-						clearSelected();
-						setState(State.idle);
-						repaint();
-						return;
-					}
-
-					// if lock, set all selected elements to uneditable
-					if (event.getSource() == lock) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						// warn user first
-						int opt = JOptionPane.showConfirmDialog(JLSInfo.frame,
-								"Making elements uneditable cannot be undone.  Are you sure you want to do this?",
-								"WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-						// if user still ok with it ...
-						if (opt == JOptionPane.OK_OPTION) {
-
-							// make selected elements uneditable
-							for (Element el : selected) {
-								el.makeUneditable();
-							}
-						}
-
-						// finish up
-						clearSelected();
-						setState(State.idle);
-						repaint();
-						return;
-					}
-
-					// paste contents of clipboard
-					if (event.getSource() == paste) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						// paste
-						if (clipboard.getElements().size() == 0)
-							return;
-						if (paste(clipboard)) {
-							setState(State.placing);
-						}
-						repaint();
-						return;
-					}
-
-					// if select all option, select everything
-					if (event.getSource() == selAll) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						doSelectAll();
-					}
-
-					// if close, close this circuit (or subcircuit)
-					if (event.getSource() == close) {
-						close();
-					}
-
-					// if undo, restore prevous copy of circuit
-					if (event.getSource() == undo) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						undo();
-						repaint();
-					}
-
-					// if redo, restore future copy of circuit
-					if (event.getSource() == redo) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						redo();
-					}
-
-					if(event.getSource() == Crotate)
-					{
-						if(!enabled)
-							return;
-						Element el = (Element)(selected.toArray()[0]);
-						el.rotate(JLSInfo.Orientation.RIGHT, this.getGraphics());
-						markChanged();
-						clearSelected();
-						setState(State.idle);
-						repaint();
-
-
-					}
-
-					if(event.getSource() == CCrotate)
-					{
-						if(!enabled)
-							return;
-						Element el = (Element)(selected.toArray()[0]);
-						el.rotate(JLSInfo.Orientation.LEFT, this.getGraphics());
-						markChanged();
-						clearSelected();
-						setState(State.idle);
-						repaint();
-					}
-
-					if(event.getSource() == matchJump) {
-						if(!enabled)
-							return;
-
-						JumpStart el = (JumpStart)(selected.toArray()[0]);
-						JumpEnd nel = new JumpEnd(circuit);
-						nel.setName(el.getName());
-						Point p = getMousePosition();
-						if(p == null) { // If the context menu wasn't within JLS
-							p = MouseInfo.getPointerInfo().getLocation();
-							p.x -= getLocationOnScreen().x;
-							p.y -= getLocationOnScreen().y;
-						}
-						x = p.x;
-						y = p.y;
-						nel.setup(graphics, this, p.x, p.y);
-
-						clearSelected();
-						circuit.addElement(nel);
-						nel.setHighlight(true);
-						selected.add(nel);
-
-						setState(State.chosen);
-						markChanged();
-						repaint();
-					}
-
-					if(event.getSource() == flip)
-					{
-						if(!enabled)
-							return;
-						Element el = (Element)(selected.toArray()[0]);
-						el.flip(this.getGraphics());
-						markChanged();
-						clearSelected();
-						setState(State.idle);
-						repaint();
-					}
-					// if connection, start drawing wires
-					else if (event.getSource() == connect) {
-
-						// do nothing if editor is disabled
-						if (!enabled)
-							return;
-
-						setState(State.startwire);
-						wireEnd = new WireEnd(circuit);
-						wireEnd.setXY(x,y);
-						wireEnd.init(circuit);
-						circuit.addElement(wireEnd);
-						selected.add(wireEnd);
-						wire = null;
-						net = new WireNet();
-						net.add(wireEnd);
-						wireEnd.setNet(net);
-						repaint();
-					}
+					// // draw all elements, selected ones last
+					// try {
+					// circuit.draw(g, selected, me);
+					// } catch (Exception e) {
+					// e.printStackTrace();
+					// }
 				}
 
+				// if watch option selected, ...
+				if (event.getSource() == watch) {
 
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					// get the single item in the selected set
+					Element el = (Element) (selected.toArray()[0]);
+
+					// if its locked, don't change it
+					if (el.isUneditable())
+						return;
+
+					// remove if watched, add if not
+					if (el.isWatched()) {
+						el.setWatched(false);
+					} else {
+						el.setWatched(true);
+					}
+					markChanged();
+
+					// clean up
+					clearSelected();
+					setState(State.idle);
+					repaint();
+					return;
+				}
+
+				// if view option selected, ...
+				if (event.getSource() == modify) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+					doModify();
+				}
+
+				// if change timing, then it must have timing info
+				if (event.getSource() == timing) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					doTiming();
+				}
+
+				// if view, then it must be a watchable element
+				if (event.getSource() == view) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					// get the single item in the selected set
+					Element el = (Element) (selected.toArray()[0]);
+
+					// ask element to display its current value
+					el.showCurrentValue(new Point(x, y));
+
+					// clean up
+					clearSelected();
+					setState(State.idle);
+					repaint();
+					return;
+				}
+
+				// if cut option selected, copy selected elements to clipboard,
+				// then delete those elements
+				if (event.getSource() == cut) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					// copy, then remove
+					copy();
+					remove();
+
+					// clean up
+					removeCoLinear();
+					clearSelected();
+					setState(State.idle);
+					repaint();
+					return;
+				}
+
+				// if copy option, copy selected elements to clipboard
+				if (event.getSource() == copy) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					copy();
+					clearSelected();
+					setState(State.idle);
+					repaint();
+					return;
+				}
+
+				// if delete option, delete selected elements
+				if (event.getSource() == delete) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					// remove
+					remove();
+					removeCoLinear();
+					clearSelected();
+					setState(State.idle);
+					repaint();
+					return;
+				}
+
+				// if lock, set all selected elements to uneditable
+				if (event.getSource() == lock) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					// warn user first
+					int opt = JOptionPane.showConfirmDialog(JLSInfo.frame,
+							"Making elements uneditable cannot be undone.  Are you sure you want to do this?",
+							"WARNING", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+					// if user still ok with it ...
+					if (opt == JOptionPane.OK_OPTION) {
+
+						// make selected elements uneditable
+						for (Element el : selected) {
+							el.makeUneditable();
+						}
+					}
+
+					// finish up
+					clearSelected();
+					setState(State.idle);
+					repaint();
+					return;
+				}
+
+				// paste contents of clipboard
+				if (event.getSource() == paste) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					// paste
+					if (clipboard.getElements().size() == 0)
+						return;
+					if (paste(clipboard)) {
+						setState(State.placing);
+					}
+					repaint();
+					return;
+				}
+
+				// if select all option, select everything
+				if (event.getSource() == selAll) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					doSelectAll();
+				}
+
+				// if close, close this circuit (or subcircuit)
+				if (event.getSource() == close) {
+					close();
+				}
+
+				// if undo, restore prevous copy of circuit
+				if (event.getSource() == undo) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					undo();
+					repaint();
+				}
+
+				// if redo, restore future copy of circuit
+				if (event.getSource() == redo) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					redo();
+				}
+
+				if (event.getSource() == Crotate) {
+					if (!enabled)
+						return;
+					Element el = (Element) (selected.toArray()[0]);
+					el.rotate(JLSInfo.Orientation.RIGHT, this.getGraphics());
+					markChanged();
+					clearSelected();
+					setState(State.idle);
+					repaint();
+
+				}
+
+				if (event.getSource() == CCrotate) {
+					if (!enabled)
+						return;
+					Element el = (Element) (selected.toArray()[0]);
+					el.rotate(JLSInfo.Orientation.LEFT, this.getGraphics());
+					markChanged();
+					clearSelected();
+					setState(State.idle);
+					repaint();
+				}
+
+				if (event.getSource() == matchJump) {
+					if (!enabled)
+						return;
+
+					JumpStart el = (JumpStart) (selected.toArray()[0]);
+					JumpEnd nel = new JumpEnd(circuit);
+					nel.setName(el.getName());
+					Point p = getMousePosition();
+					if (p == null) { // If the context menu wasn't within JLS
+						p = MouseInfo.getPointerInfo().getLocation();
+						p.x -= getLocationOnScreen().x;
+						p.y -= getLocationOnScreen().y;
+					}
+					x = p.x;
+					y = p.y;
+					nel.setup(graphics, this, p.x, p.y);
+
+					clearSelected();
+					circuit.addElement(nel);
+					nel.setHighlight(true);
+					selected.add(nel);
+
+					setState(State.chosen);
+					markChanged();
+					repaint();
+				}
+
+				if (event.getSource() == flip) {
+					if (!enabled)
+						return;
+					Element el = (Element) (selected.toArray()[0]);
+					el.flip(this.getGraphics());
+					markChanged();
+					clearSelected();
+					setState(State.idle);
+					repaint();
+				}
+				// if connection, start drawing wires
+				else if (event.getSource() == connect) {
+
+					// do nothing if editor is disabled
+					if (!enabled)
+						return;
+
+					setState(State.startwire);
+					wireEnd = new WireEnd(circuit);
+					wireEnd.setXY(x, y);
+					wireEnd.init(circuit);
+					circuit.addElement(wireEnd);
+					selected.add(wireEnd);
+					wire = null;
+					net = new WireNet();
+					net.add(wireEnd);
+					wireEnd.setNet(net);
+					repaint();
+				}
 			} // end of actionPerformed method
 
 			/**

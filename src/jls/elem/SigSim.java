@@ -4,7 +4,6 @@ import java.math.*;
 import java.util.BitSet;
 import java.util.Scanner;
 
-import javax.swing.JOptionPane;
 
 import jls.*;
 import jls.sim.*;
@@ -62,6 +61,7 @@ public abstract class SigSim extends LogicElement {
 					newLine += " " + token;
 				}
 			}
+			hex.close();
 			if (newLine.contains("#")) {
 				newSignals += newLine.substring(0,newLine.indexOf("#")) + " ";
 			}

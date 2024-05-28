@@ -6,9 +6,6 @@ import jls.sim.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
-import java.io.*;
-import java.util.*;
-import java.util.zip.ZipInputStream;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -19,8 +16,10 @@ import javax.help.*;
  * 
  * @author David A. Poplawski
  */
+@SuppressWarnings("removal")
 public final class JLSApplet extends JApplet implements ActionListener, ChangeListener {
 
+	private static final long serialVersionUID = -1217190128158313648L;
 	// properties
 	private JMenuItem newc = new JMenuItem("New");
 	private JMenuItem open = new JMenuItem("Open");
@@ -40,6 +39,7 @@ public final class JLSApplet extends JApplet implements ActionListener, ChangeLi
 	/**
 	 * Set up GUI.
 	 */
+	@SuppressWarnings("deprecation")
 	public void init() {
 		
 		JLSInfo.isApplet = true;

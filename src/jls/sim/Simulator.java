@@ -2,14 +2,6 @@ package jls.sim;
 
 import jls.*;
 import jls.elem.*;
-import jls.edit.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.print.*;
-
-import javax.print.PrintService;
-import javax.swing.*;
-import javax.swing.text.AbstractDocument;
 
 import java.util.*;
 

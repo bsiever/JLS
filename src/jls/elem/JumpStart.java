@@ -1,7 +1,6 @@
 package jls.elem;
 
 import jls.*;
-import jls.elem.Gate.Orientation;
 import jls.sim.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -410,6 +409,7 @@ public class JumpStart extends LogicElement implements TriProp {
 	 */
 	private class StartCreate extends JDialog implements ActionListener {
 		
+		private static final long serialVersionUID = 8534374286619550701L;
 		// properties
 		private JButton ok = new JButton("OK");
 		private JButton cancel = new JButton("Cancel");

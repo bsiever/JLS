@@ -6,7 +6,6 @@ import jls.sim.*;
 import java.awt.*;
 import javax.swing.*;
 import java.io.*;
-import java.math.BigInteger;
 import java.util.*;
 
 /**

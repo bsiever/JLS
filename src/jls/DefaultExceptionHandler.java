@@ -15,7 +15,8 @@ public final class DefaultExceptionHandler implements Thread.UncaughtExceptionHa
 	private boolean recovering = false;
 	private JLSStart jls = null;
 	private Circuit circuit = null;
-	private int [] extraSpace = new int[10000];
+	// BSIEVER: This seems like a hack.  Hopefully no longer necessary
+//	private int [] extraSpace = new int[10000];
 	
 	/**
 	 * Save reference to JLS in case circuit(s) can be saved.
@@ -56,7 +57,7 @@ public final class DefaultExceptionHandler implements Thread.UncaughtExceptionHa
 		if (th instanceof OutOfMemoryError) {
 			
 			// free up some memory and garbage collect
-			extraSpace = null;
+			//extraSpace = null;
 			System.gc();
 			
 			// if batch, print message and quit

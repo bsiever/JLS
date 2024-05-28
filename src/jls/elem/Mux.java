@@ -594,6 +594,7 @@ public class Mux extends LogicElement {
 	 */
 	protected class MuxCreate extends JDialog implements ActionListener {
 		
+		private static final long serialVersionUID = -1010347440979624597L;
 		// properties
 		private JButton ok = new JButton("OK");
 		private JButton cancel = new JButton("Cancel");

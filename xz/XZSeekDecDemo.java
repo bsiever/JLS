@@ -7,7 +7,6 @@
  * You can do whatever you want with this file.
  */
 
-import java.io.*;
 import org.tukaani.xz.*;
 
 /**

@@ -244,6 +244,7 @@ public abstract class Pin extends LogicElement {
 	 */
 	private class PinCreate extends JDialog implements ActionListener {
 		
+		private static final long serialVersionUID = 2140139417220307223L;
 		// properties
 		private JButton ok = new JButton("OK");
 		private JButton cancel = new JButton("Cancel");

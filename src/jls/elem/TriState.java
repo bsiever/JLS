@@ -572,6 +572,7 @@ public class TriState extends LogicElement {
 	 */
 	private class TriStateCreate extends JDialog implements ActionListener {
 		
+		private static final long serialVersionUID = 2288674343449766862L;
 		// properties
 		private JButton ok = new JButton("OK");
 		private JButton cancel = new JButton("Cancel");

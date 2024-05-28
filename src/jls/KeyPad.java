@@ -14,6 +14,7 @@ import java.net.*;
  */
 public final class KeyPad extends JButton implements ActionListener {
 	
+	private static final long serialVersionUID = -8157158864613795404L;
 	// properties
 	private JButton [] digits = new JButton[16];
 	private JButton reset = new JButton("C");

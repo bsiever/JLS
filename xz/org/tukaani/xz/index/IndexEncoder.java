@@ -41,7 +41,7 @@ public class IndexEncoder extends IndexBase {
 		EncoderUtil.encodeVLI(outChecked, recordCount);
 
 		// List of Records
-		for (Iterator i = records.iterator(); i.hasNext();) {
+		for (Iterator<IndexRecord> i = records.iterator(); i.hasNext();) {
 			IndexRecord record = (IndexRecord) i.next();
 			EncoderUtil.encodeVLI(outChecked, record.unpadded);
 			EncoderUtil.encodeVLI(outChecked, record.uncompressed);

@@ -11,6 +11,7 @@ import javax.swing.*;
  */
 public final class MemTrace extends JFrame {
 	
+	private static final long serialVersionUID = 5879217492246708665L;
 	// named constants
 	private int WIDTH = 300;
 	private int HEIGHT = 200;

@@ -3,7 +3,6 @@ package jls.elem;
 import jls.*;
 import jls.sim.*;
 
-import java.io.PrintWriter;
 import java.util.*;
 
 /**

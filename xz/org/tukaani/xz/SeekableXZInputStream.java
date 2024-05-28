@@ -95,7 +95,7 @@ public class SeekableXZInputStream extends SeekableInputStream {
 	 * List of IndexDecoders, one for each Stream in the file. The list is in
 	 * reverse order: The first element is the last Stream in the file.
 	 */
-	private final ArrayList streams = new ArrayList();
+	private final ArrayList<IndexDecoder> streams = new ArrayList<IndexDecoder>();
 
 	/**
 	 * Bitmask of all Check IDs seen.

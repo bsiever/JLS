@@ -286,14 +286,9 @@ public class Element {
 	/**
 	 * See if this element intersects another.
 	 * 
-<<<<<<< HEAD
 	 * TODO major point of optimization
 	 * 
-	 * @param other
-	 *            The other element.
-=======
 	 * @param other The other element.
->>>>>>> 6fff4f8d5651621bfd72b14010a8a3fdd3ba837a
 	 * 
 	 * @return true if this element intersects the other, false if not.
 	 */

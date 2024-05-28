@@ -14,6 +14,7 @@ import java.util.*;
  */
 public class Trace extends JPanel implements MouseListener, MouseMotionListener {
 	
+	private static final long serialVersionUID = -553322311112827191L;
 	// named constants
 	protected final int HEIGHT = 40;
 	

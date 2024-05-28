@@ -13,6 +13,7 @@ import java.util.*;
  */
 public final class Eula extends JDialog implements ActionListener {
 	
+	private static final long serialVersionUID = 8017932670916954040L;
 	// properties
 	private static boolean ok = false;
 	private JButton accept;
@@ -82,6 +83,7 @@ public final class Eula extends JDialog implements ActionListener {
 		Scanner s = new Scanner(System.in);
 		String in = s.nextLine();
 		if(in.equalsIgnoreCase("y") || in.length() == 0) ok = true;
+		s.close();
 	}
 	
 	/**

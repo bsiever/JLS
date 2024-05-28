@@ -16,11 +16,16 @@ final class State {
 	private static final int LIT_STATES = 7;
 
 	private static final int LIT_LIT = 0;
+	@SuppressWarnings("unused")
 	private static final int MATCH_LIT_LIT = 1;
+	@SuppressWarnings("unused")
 	private static final int REP_LIT_LIT = 2;
 	private static final int SHORTREP_LIT_LIT = 3;
+	@SuppressWarnings("unused")
 	private static final int MATCH_LIT = 4;
+	@SuppressWarnings("unused")
 	private static final int REP_LIT = 5;
+	@SuppressWarnings("unused")
 	private static final int SHORTREP_LIT = 6;
 	private static final int LIT_MATCH = 7;
 	private static final int LIT_LONGREP = 8;

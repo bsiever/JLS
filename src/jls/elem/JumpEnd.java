@@ -373,7 +373,7 @@ public class JumpEnd extends LogicElement {
 		// properties
 		private JButton ok = new JButton("OK");
 		private JButton cancel = new JButton("Cancel");
-		private JList starts;
+		private JList<String> starts;
 		private JRadioButton left = new JRadioButton("left");
 		private JRadioButton right = new JRadioButton("right");
 		

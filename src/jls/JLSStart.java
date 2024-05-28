@@ -23,13 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URL;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.util.Enumeration;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Vector;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
@@ -1045,7 +1041,6 @@ public class JLSStart extends JFrame implements ChangeListener {
 	private void open(String filePath) {
 
 		File file = null;
-		String dir = "";
 
 		// get circuit name from user if parameter is null
 		if (filePath == null) {

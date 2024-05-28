@@ -924,6 +924,7 @@ public final class InterractiveSimulator extends Simulator {
 	 */
 	public class Traces extends JPanel implements MouseMotionListener {
 
+		private static final long serialVersionUID = 6708785720545463777L;
 		// properties
 		private java.util.List<Trace> traceList = new LinkedList<Trace>();
 		private java.util.List<Trace> newList = new LinkedList<Trace>();
@@ -1144,6 +1145,8 @@ public final class InterractiveSimulator extends Simulator {
 	 * slider indicates.
 	 */
 	private class Header extends Trace {
+
+		private static final long serialVersionUID = 3571512797661409482L;
 
 		/**
 		 * Call superclass constructor, supply null name.

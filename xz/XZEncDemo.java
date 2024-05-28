@@ -7,7 +7,6 @@
  * You can do whatever you want with this file.
  */
 
-import java.io.*;
 import org.tukaani.xz.*;
 
 /**
@@ -37,5 +36,6 @@ class XZEncDemo {
 			out.write(buf, 0, size);
 
 		out.finish();
+		out.close();
 	}
 }

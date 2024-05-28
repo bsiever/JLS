@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
-import java.math.*;
 import jls.*;
 import jls.sim.*;
 
@@ -217,6 +216,7 @@ public class SigGen extends SigSim {
 	 */
 	private class EditSignals extends JDialog implements ActionListener {
 		
+		private static final long serialVersionUID = -8803608758050224581L;
 		// properties
 		private JTextArea textArea = new JTextArea();
 		private JButton ok = new JButton("OK");

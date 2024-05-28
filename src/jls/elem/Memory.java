@@ -485,6 +485,7 @@ public class Memory extends LogicElement {
 	 */
 	private class MemoryEdit extends JDialog implements ActionListener {
 		
+		private static final long serialVersionUID = 6506131087485415703L;
 		// properties
 		private JButton ok = new JButton("OK");
 		private JButton cancel = new JButton("Cancel");
@@ -753,6 +754,8 @@ public class Memory extends LogicElement {
 				window.add(pane);
 				
 				Action okAction = new AbstractAction("ok") {
+					private static final long serialVersionUID = 2394857054973832323L;
+
 					public void actionPerformed(ActionEvent event) {
 						tempInit = area.getText();
 						String msg = initOK(tempInit,Integer.MAX_VALUE,Integer.MAX_VALUE,false);
@@ -766,6 +769,8 @@ public class Memory extends LogicElement {
 					}
 				};
 				Action cancelAction = new AbstractAction("cancel") {
+					private static final long serialVersionUID = -6101518567944812390L;
+
 					public void actionPerformed(ActionEvent event) {
 						init.dispose();
 					}
@@ -902,11 +907,13 @@ public class Memory extends LogicElement {
 					addr = lscan.nextInt();
 				}
 				else {
+					lscan.close();
 					return "line " + lineNumber + ": missing or invalid address";
 				}
 
 				// check address
 				if (addr < 0 || addr >= maxAddr) {
+					lscan.close();
 					return "line " + lineNumber + ": invalid address";
 				}
 				
@@ -916,12 +923,14 @@ public class Memory extends LogicElement {
 					data = lscan.nextBigInteger();
 				}
 				else {
+					lscan.close();
 					return "line " + lineNumber + ": missing or invalid value";
 				}
 				
 				// check value
 				BitSet bval = BitSetUtils.Create(data);
 				if (bval.length() > bitsPerWord) {
+					lscan.close();
 					return "line " + lineNumber + ": value has more bits than word size";
 				}
 				
@@ -929,6 +938,7 @@ public class Memory extends LogicElement {
 				if (storing) {
 					initMem.put(addr,bval);
 				}
+				lscan.close();
 			}
 			
 			// read next line
