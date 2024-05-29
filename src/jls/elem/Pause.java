@@ -176,8 +176,6 @@ public class Pause extends LogicElement {
 	//	Simulation
 	//	-------------------------------------------------------------------------------
 
-	private BitSet currentValue = new BitSet();
-
 	/**
 	 * Initialize simulation.
 	 * 
@@ -185,17 +183,6 @@ public class Pause extends LogicElement {
 	 */
 	public void initSim(Simulator sim) {
 
-		for (Input input : inputs) {
-			if (!input.isAttached())
-				continue;
-			// TODO: Review what this handled
-			if (input.getWireEnd().getNet().isTriState()) {
-				currentValue = null;
-			}
-			else {
-				currentValue = new BitSet();
-			}
-		}
 	} // end of initSim method
 
 	/**
