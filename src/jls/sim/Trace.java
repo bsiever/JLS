@@ -116,14 +116,15 @@ public class Trace extends JPanel implements MouseListener, MouseMotionListener 
 			return;
 			
 		Change ch = new Change();
-		if (value == null) {
-			ch.value = off;
-			previousValue = off;
-		}
-		else {
+// value can not be "null".  off is not null (set in constructor) and if value were null, it would be set to off. 
+//		if (value == null) {
+//			ch.value = off;
+//			previousValue = off;
+//		}
+//		else {
 			ch.value = (BitSet)value.clone();
 			previousValue = (BitSet)value.clone();
-		}
+//		}
 		ch.when = when;
 		pendingChanges.add(0,ch);
 		

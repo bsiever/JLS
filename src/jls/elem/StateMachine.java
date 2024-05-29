@@ -479,6 +479,8 @@ public final class StateMachine extends LogicElement implements Printable {
 		case newOutput:
 			buildState.setOutputValue(name,value);
 			break;
+		default:
+			break;
 		}
 		
 	} // end of setValue (long) method

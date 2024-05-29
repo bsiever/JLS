@@ -195,7 +195,7 @@ public class BatchSimulator extends Simulator {
 
 		// set up printer job
 		PrinterJob job = PrinterJob.getPrinterJob();
-		PrintService [] services = job.lookupPrintServices();
+		PrintService [] services = PrinterJob.lookupPrintServices();
 		PrintService want = null;
 		if (printer == null) {
 			System.out.println("no printer specified, use -p");
