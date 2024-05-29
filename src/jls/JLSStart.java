@@ -58,8 +58,6 @@ import jls.elem.SubCircuit;
 import jls.sim.BatchSimulator;
 import jls.sim.InterractiveSimulator;
 
-import org.tukaani.xz.SeekableFileInputStream;
-import org.tukaani.xz.SeekableXZInputStream;
 
 @SuppressWarnings("serial")
 public class JLSStart extends JFrame implements ChangeListener {
@@ -1230,14 +1228,6 @@ public class JLSStart extends JFrame implements ChangeListener {
 		return toTest;
 	}
 	
-	private static Scanner getXZScanner(String filePath){
-		try{
-			return testScanner(new Scanner(new SeekableXZInputStream(new SeekableFileInputStream(new File(filePath)))));
-		}catch(Throwable e){
-			return null;
-		}
-	}
-	
 	private static Scanner getZipScanner(String filePath){
 		try{
 			ZipFile target = new ZipFile(new File(filePath));
@@ -1272,20 +1262,12 @@ public class JLSStart extends JFrame implements ChangeListener {
 		}
 		
 		Scanner toReturn = null;
-		System.out.println(filePath);
-		
-		//See if the .jls file is in xz format
-		if((toReturn = getXZScanner(filePath)) != null) return toReturn;
-		
-		System.out.println("Not a XZ compressed file, trying to open as zip");
+				
 		if((toReturn = getZipScanner(filePath)) != null) return toReturn;
-		
-			
-		System.out.println("Not a zip compressed file, trying to open as plain text");
+					
 		if((toReturn = getTextScanner(filePath)) != null) return toReturn;
 					
-		
-		System.out.println("Unable to open specified file.");		
+		TellUser.err("Unable to open " + name + "\n", true);
 		return null;
 	}
 	

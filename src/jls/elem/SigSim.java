@@ -91,6 +91,7 @@ public abstract class SigSim extends LogicElement {
 			// get initial value
 			if (!input.hasNextBigInteger()) {
 				specError("missing or invalid initial value for signal " + signal);
+				input.close();
 				return;
 			}
 			BigInteger value = input.nextBigInteger();
@@ -103,12 +104,14 @@ public abstract class SigSim extends LogicElement {
 				if (value.signum() < 0) {
 					if (value.bitLength()+1 > bits) {
 						specError("value " + value + " will not fit in signal " + signal);
+						input.close();
 						return;
 					}
 				}
 				else {
 					if (value.bitLength() > bits) {
 						specError("value " + value + " will not fit in signal " + signal);
+						input.close();
 						return;
 					}
 				}
@@ -123,7 +126,7 @@ public abstract class SigSim extends LogicElement {
 				BitSet bval = BitSetUtils.Create(value);
 				sim.post(new SimEvent(0,pin,bval));
 			}
-
+			input.close();
 			// get the rest of the events for this pin and add to local event list
 			long time = 0;
 			while (true) {

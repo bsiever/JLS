@@ -908,12 +908,14 @@ public class Memory extends LogicElement {
 				}
 				else {
 					lscan.close();
+					scan.close();
 					return "line " + lineNumber + ": missing or invalid address";
 				}
 
 				// check address
 				if (addr < 0 || addr >= maxAddr) {
 					lscan.close();
+					scan.close();
 					return "line " + lineNumber + ": invalid address";
 				}
 				
@@ -924,6 +926,7 @@ public class Memory extends LogicElement {
 				}
 				else {
 					lscan.close();
+					scan.close();
 					return "line " + lineNumber + ": missing or invalid value";
 				}
 				
@@ -931,6 +934,7 @@ public class Memory extends LogicElement {
 				BitSet bval = BitSetUtils.Create(data);
 				if (bval.length() > bitsPerWord) {
 					lscan.close();
+					scan.close();
 					return "line " + lineNumber + ": value has more bits than word size";
 				}
 				
@@ -950,6 +954,7 @@ public class Memory extends LogicElement {
 				scanning = false;
 			}
 		}
+		scan.close();
 		return null;
 	} // end of initOK method
 	
