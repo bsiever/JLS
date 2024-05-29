@@ -515,7 +515,7 @@ public abstract class Group extends LogicElement {
 			// set up automatic disabling of already-bundled bits
 			choose.setCellRenderer(new DefaultListCellRenderer() {
 				@Override
-				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+				public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 					boolean allow = true;
 					Entry e = (Entry) pick.get(index);
 					if(e.isPicked()) {
