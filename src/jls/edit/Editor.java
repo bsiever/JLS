@@ -15,9 +15,6 @@ import jls.Util;
 import jls.elem.Element;
 import jls.elem.SubCircuit;
 
-import org.tukaani.xz.LZMA2Options;
-import org.tukaani.xz.XZOutputStream;
-
 /**
  * Adds naming and file save/saveas/close capability to an edited circuit.
  * Used by application version.
@@ -59,9 +56,10 @@ public final class Editor extends SimpleEditor {
 		// create output file
 		String dir = circuit.getDirectory() + "/";
 		String fileName = dir + circuit.getName() + ".jls";
-		XZOutputStream out = null;
+		FileOutputStream out = null;
+//		XZOutputStream out = null;
 		try {
-			out = new XZOutputStream(new FileOutputStream(fileName), new LZMA2Options());
+			out = new FileOutputStream(fileName);
 			//out.putNextEntry(new ZipEntry("JLSCircuit"));
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(getTopLevelAncestor(),

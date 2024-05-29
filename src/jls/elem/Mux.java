@@ -180,6 +180,18 @@ public class Mux extends LogicElement {
 		// draw shape
 		int s = JLSInfo.spacing;
 		g.setColor(Color.black);
+		
+		// Prototype for trapezoid 
+		// Needs to adjust output and input too.
+//		if(outputOrientation == JLSInfo.Orientation.RIGHT)
+//		{
+//			g.drawLine(x,y,x,y+height);
+//			g.drawLine(x+2*s,y+s,x+2*s,y+height-s);
+//			g.drawLine(x,y,x+2*s,y+s);
+//			g.drawLine(x,y+height,x+2*s,y+height-s);
+//		}
+
+		
 		if(outputOrientation == JLSInfo.Orientation.LEFT || outputOrientation == JLSInfo.Orientation.RIGHT)
 		{
 			g.drawArc(x,y,2*s,2*s,0,180);
@@ -193,7 +205,8 @@ public class Mux extends LogicElement {
 			g.drawLine(x+s,y,x+width-s,y);
 			g.drawLine(x+s,y+2*s,x+width-s,y+2*s);
 			g.drawArc(x+width-2*s,y,2*s,2*s,-90,180);
-		}
+		}		
+		
 		// draw inputs and labels
 		FontMetrics fm = g.getFontMetrics();
 		int ascent = fm.getAscent();

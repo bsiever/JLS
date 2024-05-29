@@ -14,14 +14,14 @@ public final class JLSInfo {
 	// version info
 
 
-	public static final String build = "<p>[built on March 18, 2014 at 11:30 AM]";
+	public static final String build = "<p>[built May 28, 2024 at 5:30 PM]";
 	public static final int vers = 4;
-	public static final int release = 1;
+	public static final int release = 2;
 	public static final int buildNum = 5;
 	public static final int year = 2014;
 	
 	public static final String version = "JLS " + vers + "." + release + 
-		" (Michigan Technological University)";
+		" (Michigan Technological University / Updates by Bill Siever)";
 	
 	// miscellaneous parameters
 	public static final int windowsize = 600;

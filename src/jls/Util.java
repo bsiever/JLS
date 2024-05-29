@@ -231,7 +231,7 @@ public final class Util {
 				continue;
 			if (Character.isDigit(c) && i > 0)
 				continue;
-			if (c == '_' && i > 0)
+			if ((c == '_' || c == '-') && i > 0)
 				continue;
 			return false;
 		}

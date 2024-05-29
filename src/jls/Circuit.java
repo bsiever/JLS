@@ -619,7 +619,6 @@ public class Circuit implements Printable {
 	 * in the second set are drawn, then the ones in the second set are drawn.
 	 * Wires are drawn first in each set.
 	 * 
-	 * <<<<<<< HEAD
 	 * 
 	 * @param g
 	 *            The graphics object to draw with.
@@ -628,7 +627,7 @@ public class Circuit implements Printable {
 	 * @param ed
 	 *            The editor window doing the drawing.
 	 * @throws Exception
-	 *             =======
+	 * 
 	 * @param g
 	 *            The graphics object to draw with.
 	 * @param second
