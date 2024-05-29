@@ -2548,6 +2548,7 @@ public abstract class SimpleEditor extends JPanel {
 			 * @return false if put is already attached or bits do not match, true otherwise.
 			 */
 			private boolean canConnect(WireEnd end, Put put) {
+				// TODO:  Review this for the tri-state error issue. 
 
 				// can't attach a non-dangling wire end
 				if (!end.isDangling()) {

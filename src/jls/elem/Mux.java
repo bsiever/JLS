@@ -104,6 +104,7 @@ public class Mux extends LogicElement {
 		// determine number of select bits
 		int sbits = 32 - Integer.numberOfLeadingZeros(numInputs-1);
 		
+		// TODO
 		// create select input
 		if(selectorOrientation == JLSInfo.Orientation.DOWN)
 		{
@@ -123,6 +124,7 @@ public class Mux extends LogicElement {
 		}
 		
 		
+		// TODO
 		int ypos = s;
 		if(outputOrientation == JLSInfo.Orientation.RIGHT)
 		{
@@ -178,34 +180,51 @@ public class Mux extends LogicElement {
 		super.draw(g);
 		
 		// draw shape
-		int s = JLSInfo.spacing;
+//		int s = JLSInfo.spacing;
+		int offset = JLSInfo.spacing/2; 
 		g.setColor(Color.black);
 		
 		// Prototype for trapezoid 
 		// Needs to adjust output and input too.
-//		if(outputOrientation == JLSInfo.Orientation.RIGHT)
-//		{
-//			g.drawLine(x,y,x,y+height);
-//			g.drawLine(x+2*s,y+s,x+2*s,y+height-s);
-//			g.drawLine(x,y,x+2*s,y+s);
-//			g.drawLine(x,y+height,x+2*s,y+height-s);
-//		}
+		if(outputOrientation == JLSInfo.Orientation.RIGHT)
+		{
+			g.drawLine(x,y,x,y+height);             // Left
+			g.drawLine(x+width,y+offset,x+width,y+height-offset); // Right
+			g.drawLine(x,y,x+width,y+offset);              // Top
+			g.drawLine(x,y+height,x+width,y+height-offset); // Bottom
+		} else if(outputOrientation == JLSInfo.Orientation.LEFT) {
+			g.drawLine(x,y+offset,x,y+height-offset);             // Left
+			g.drawLine(x+width,y,x+width,y+height);         // Right
+			g.drawLine(x,y+offset,x+width,y);              // Top
+			g.drawLine(x,y+height-offset,x+width,y+height); // Bottom
+		} else if(outputOrientation == JLSInfo.Orientation.UP) {
+			g.drawLine(x+offset,y,x+width-offset,y);             // Top
+			g.drawLine(x,y+height,x+width,y+height);         // Bottom
+			g.drawLine(x+offset,y,x,y+height);              // Left
+			g.drawLine(x+width-offset,y,x+width,y+height); // Right
+		} else {  // DOWN
+			g.drawLine(x,y,x+width,y);             // Top
+			g.drawLine(x+offset,y+height,x+width-offset,y+height);         // Bottom
+			g.drawLine(x,y,x+offset,y+height);              // Left
+			g.drawLine(x+width,y,x+width-offset,y+height); // Right	
+		}
+		
 
 		
-		if(outputOrientation == JLSInfo.Orientation.LEFT || outputOrientation == JLSInfo.Orientation.RIGHT)
-		{
-			g.drawArc(x,y,2*s,2*s,0,180);
-			g.drawLine(x,y+s,x,y+height-s);
-			g.drawLine(x+2*s,y+s,x+2*s,y+height-s);
-			g.drawArc(x,y+height-2*s,2*s,2*s,180,180);
-		}
-		else
-		{
-			g.drawArc(x, y, 2*s, 2*s, -90, -180);
-			g.drawLine(x+s,y,x+width-s,y);
-			g.drawLine(x+s,y+2*s,x+width-s,y+2*s);
-			g.drawArc(x+width-2*s,y,2*s,2*s,-90,180);
-		}		
+//		if(outputOrientation == JLSInfo.Orientation.LEFT || outputOrientation == JLSInfo.Orientation.RIGHT)
+//		{
+//			g.drawArc(x,y,2*s,2*s,0,180);
+//			g.drawLine(x,y+s,x,y+height-s);
+//			g.drawLine(x+2*s,y+s,x+2*s,y+height-s);
+//			g.drawArc(x,y+height-2*s,2*s,2*s,180,180);
+//		}
+//		else
+//		{
+//			g.drawArc(x, y, 2*s, 2*s, -90, -180);
+//			g.drawLine(x+s,y,x+width-s,y);
+//			g.drawLine(x+s,y+2*s,x+width-s,y+2*s);
+//			g.drawArc(x+width-2*s,y,2*s,2*s,-90,180);
+//		}		
 		
 		// draw inputs and labels
 		FontMetrics fm = g.getFontMetrics();

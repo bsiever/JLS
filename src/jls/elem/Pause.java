@@ -188,6 +188,7 @@ public class Pause extends LogicElement {
 		for (Input input : inputs) {
 			if (!input.isAttached())
 				continue;
+			// TODO: Review what this handled
 			if (input.getWireEnd().getNet().isTriState()) {
 				currentValue = null;
 			}
