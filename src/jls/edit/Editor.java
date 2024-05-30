@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -56,11 +58,10 @@ public final class Editor extends SimpleEditor {
 		// create output file
 		String dir = circuit.getDirectory() + "/";
 		String fileName = dir + circuit.getName() + ".jls";
-		FileOutputStream out = null;
-//		XZOutputStream out = null;
+		ZipOutputStream out = null;
 		try {
-			out = new FileOutputStream(fileName);
-			//out.putNextEntry(new ZipEntry("JLSCircuit"));
+			out = new ZipOutputStream(new FileOutputStream(fileName));
+			out.putNextEntry(new ZipEntry("JLSCircuit"));
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(getTopLevelAncestor(),
 					"Can't write to " + fileName, "Error",
