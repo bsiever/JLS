@@ -1023,7 +1023,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 		// create circuit and set up editor
 		Circuit circ = new Circuit(name);
-		circ.setDirectory(System.getProperty("user.dir"));
+		circ.setDirectory(System.getProperty("user.home"));
 		exHandler.setCircuit(circ);
 		setupEditor(circ,name);
 	} // end of newCircuit method
@@ -1042,7 +1042,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 		// get circuit name from user if parameter is null
 		if (filePath == null) {
-			prevOpenDir = prevOpenDir.equals("") ? System.getProperty("user.dir") : prevOpenDir;
+			prevOpenDir = prevOpenDir.equals("") ? System.getProperty("user.home") : prevOpenDir;
 			JFileChooser chooser = new JFileChooser( prevOpenDir );
 			
 			javax.swing.filechooser.FileFilter filter =
@@ -1066,7 +1066,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 			prevOpenDir = chooser.getCurrentDirectory().toString();
 		}else {
 			file = new File(filePath);
-			prevOpenDir = file.getParent().equals("") ? System.getProperty("user.dir") : file.getParent();
+			prevOpenDir = file.getParent().equals("") ? System.getProperty("user.home") : file.getParent();
 		}
 		
 		Scanner input = getScannerForFile(filePath);
@@ -1285,7 +1285,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
+		JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
 		javax.swing.filechooser.FileFilter filter =
 			new javax.swing.filechooser.FileFilter() {
 			public boolean accept(File f) {
@@ -1710,7 +1710,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 			return;
 
 		// get name from user
-		JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
+		JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
 		javax.swing.filechooser.FileFilter filter =
 			new javax.swing.filechooser.FileFilter() {
 			public boolean accept(File f) {
