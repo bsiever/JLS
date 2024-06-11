@@ -126,13 +126,13 @@ public abstract class SigSim extends LogicElement {
 				BitSet bval = BitSetUtils.Create(value);
 				sim.post(new SimEvent(0,pin,bval));
 			}
-			input.close();
 			// get the rest of the events for this pin and add to local event list
 			long time = 0;
 			while (true) {
 				long newTime = 0;
 				if (!input.hasNext()) {
 					specError("expected for, until or end for signal " + signal);
+					input.close();
 					return;
 				}
 				String type = input.next();
@@ -142,6 +142,7 @@ public abstract class SigSim extends LogicElement {
 				else if (type.equals("for")) {
 					if (!input.hasNextLong()) {
 						specError("missing or invalid duration for signal " + signal);
+						input.close();
 						return;
 					}
 					newTime = time + input.nextLong();
@@ -149,20 +150,24 @@ public abstract class SigSim extends LogicElement {
 				else if (type.equals("until")) {
 					if (!input.hasNextLong()) {
 						specError("missing or invalid until time for signal " + signal);
+						input.close();
 						return;
 					}
 					newTime = input.nextLong();
 					if (newTime <= time) {
 						specError("until time not greater than previous time for signal " + signal);
+						input.close();
 						return;
 					}
 				}
 				else {
 					specError("expected for, until or end for signal " + signal);
+					input.close();
 					return;
 				}
 				if (!input.hasNextBigInteger()) {
 					specError("expected value for signal " + signal);
+					input.close();
 					return;
 				}
 				value = input.nextBigInteger();
@@ -173,12 +178,14 @@ public abstract class SigSim extends LogicElement {
 					if (value.signum() < 0) {
 						if (value.bitLength()+1 > bits) {
 							specError("value " + value + " will not fit in signal " + signal);
+							input.close();
 							return;
 						}
 					}
 					else {
 						if (value.bitLength() > bits) {
 							specError("value " + value + " will not fit in signal " + signal);
+							input.close();
 							return;
 						}
 					}
