@@ -205,6 +205,7 @@ public abstract class SigSim extends LogicElement {
 				time = newTime;
 			}
 		}
+		input.close();
 	} // end of initSim method
 
 	/**
