@@ -1077,7 +1077,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 		// create new circuit
 		Circuit circ = new Circuit(cname);
-		//circ.setDirectory(dir);
+		circ.setDirectory(file.getParent());
 
 		// read circuit from file
 		boolean loadOK = circ.load(input);
