@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.event.*;
 
 /**
- * Display dialog showing version and copywrite information about JLS.
+ * Display dialog showing version and copyright information about JLS.
  * 
  * @author David A. Poplawski
  */
@@ -27,8 +27,8 @@ public final class About extends JDialog implements ActionListener {
 		String line1 = "<h1>&nbsp;JLS Version " + JLSInfo.vers + "." + 
 		JLSInfo.release + "." + JLSInfo.buildNum + "&nbsp;</h1>";
 		String line2 = "<p>Copyright " + JLSInfo.year;
-		String line3 = "<p>David A. Poplawski & Michigan Technological University";
-		String line4 = "<p>All Rights Reserved";
+		String line3 = "<p>"+JLSInfo.authors;
+		String line4 = "<p>"+JLSInfo.repository;
 		String html = "<html><center>" + line1 + line2 + line3 + line4 +
 			JLSInfo.build + "</center></html>";
 		JLabel info = new JLabel(html);

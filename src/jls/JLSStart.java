@@ -506,7 +506,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 		// make it look the same everywhere (especially MAC's).
 		try {
-			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+	        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());	
 		}
 		catch (Exception ex) {
 
