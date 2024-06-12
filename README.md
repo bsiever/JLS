@@ -24,6 +24,7 @@ A digital logic simulator, written in Java.
    2. If jre has been updated, update `runtime-image` path
    3. Remove any old app (`JLS.app` folder)
 4. Run `remakeMacBundle.sh`
+5. `zip -r JLS_mac.zip JLS.app`
 
 ## Windows
 
@@ -31,8 +32,12 @@ A digital logic simulator, written in Java.
 # Misc. notes & debris
 
 * Resources for converting svgs to icons (macOS icons)
+  * `brew install svg2png` 
+  * Script from https://gist.github.com/adriansr/1da9b18a8076b0f8a977a5eea0ae41ef 
+  
   * https://cloudconvert.com/   
   * https://xconvertx.com/convert/svg_to_icns/
+* Package specific resources
 
 * [jpackage](https://docs.oracle.com/en/java/javase/19/jpackage/packaging-overview.html) for creating Java packages
    * Mac 
