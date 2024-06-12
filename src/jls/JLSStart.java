@@ -516,26 +516,24 @@ public class JLSStart extends JFrame implements ChangeListener {
 		try {
 			
 	        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());	
-
-        	// Setup file open 
-        	Desktop a = Desktop.getDesktop();
-            a.setOpenFileHandler(new OpenFilesHandler() {
-
-				@Override
-				public void openFiles(OpenFilesEvent e) {
-					List<File> files = e.getFiles();
-					if(files.size()>0) {
-						String fileName = files.get(0).getAbsolutePath();
-            			open(fileName);
-					}
-				}
-            	
-            }); 
-
 	        
 	        // If on Mac, swap meta to have copy/paste/cut work
             String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
             if(OS.indexOf("mac") >=0 || OS.indexOf("darwin")>=0 || OS.indexOf("os x") >=0) {
+            	// Setup file open 
+            	Desktop a = Desktop.getDesktop();
+                a.setOpenFileHandler(new OpenFilesHandler() {
+
+    				@Override
+    				public void openFiles(OpenFilesEvent e) {
+    					List<File> files = e.getFiles();
+    					if(files.size()>0) {
+    						String fileName = files.get(0).getAbsolutePath();
+                			open(fileName);
+    					}
+    				}
+                	
+                }); 
             	
             	// Set up copy/paste/cut
             	// https://stackoverflow.com/questions/1852433/use-default-keymap-of-native-os 
