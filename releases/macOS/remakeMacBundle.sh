@@ -1,6 +1,7 @@
 #!/bin/sh
 
 jpackage --type app-image --app-version 4.4 --copyright ""  --description "J(ava) Logic Simulator" \
+    --name "JLS" \
     --icon  resources/JLS.icns  \
     --resource-dir resources \
     --mac-package-identifier "info.siever.JLS" \
