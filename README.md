@@ -28,6 +28,11 @@ A digital logic simulator, written in Java.
 
 ## Windows
 
+1. Get the jre (https://adoptium.net/temurin/releases/), put it in `jre`, and unzip it.  
+2. Copy the JLS jar to the contents folder (`cd releases/windows`, `cp ../JLS.jar contents`)
+3. Update the `remakeExe.sh` script with version number and any changes to jre directory/name. 
+4. Remove old version (remove the JLS director in releases/windows)
+5. Run `remakeExe.sh` 
 
 # Misc. notes & debris
 
