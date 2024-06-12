@@ -1,42 +1,48 @@
 # JLS: Java Logic Simulator
 
+A digital logic simulator, written in Java.
 
-# JAR
- 
-In Eclipse:  
-1. File>Export
-2. Java>Runnable JAR
-3. Select destination / etc. 
+# Releasing 
 
+## Common
 
-# Packaging
+1. Update `src/jls/JLSInfo.java`'s `ver`, `release`, and `buildNum`
+2. Rebuild and export to Jar (File > Export;  Java > Runnable JAR)
+	1. Launch Config `JLS - JLS`
+	2. Place it in JLS/releases/JLS.jar
+	3. Select "Extract required libraries into generated JAR`
+3. Navigate to `releases`
 
-https://docs.oracle.com/en/java/javase/19/jpackage/packaging-overview.html 
+## macOS
 
+1. Create certificates for Application install to login keychain. (https://developer.apple.com/help/account/create-certificates/create-developer-id-certificates/)
+2. Create a multi-platform version of jre (using notes from https://incenp.org/notes/2023/universal-java-app-on-macos.html)
+	1. Get latest tgz bundles from Adoptium: https://adoptium.net/temurin/releases/?os=mac and place in jre folder (OpenJDK*-jre_x64_mac_hotspot_*.tar.gz and  OpenJDK.+-jre_x64_mac_hotspot_(.+).tar.gz)
+	2. Run `jre/mergeVersions.sh` to extract them and create a merged Universal version 
+3. Update `remakeMacBundle.sh` with updates to files, directories, versions. 
+   1. Update `app-version` 
+   2. If jre has been updated, update `runtime-image` path
+   3. Remove any old app (`JLS.app` folder)
+4. Run `remakeMacBundle.sh`
 
-# Icon
-
-https://cloudconvert.com/  svg to ico 
-https://xconvertx.com/convert/svg_to_icns/
-
-
-
-
-
-
-
-
-# macOS
-
-Ok...
+## Windows
 
 
-1. Did the process to create a multi-platform version of jre at https://incenp.org/notes/2023/universal-java-app-on-macos.html 
+# Misc. notes & debris
 
-2. Created certificates for both Application and Installer and installed both to login keychain. 
+* Resources for converting svgs to icons (macOS icons)
+  * https://cloudconvert.com/   
+  * https://xconvertx.com/convert/svg_to_icns/
 
-3. Did jpackage to create app:
-```
+* [jpackage](https://docs.oracle.com/en/java/javase/19/jpackage/packaging-overview.html) for creating Java packages
+   * Mac 
+     * Packaging https://munier.perso.univ-pau.fr/temp/jdk-7u45-apidocs/technotes/guides/jweb/packagingAppsForMac.html 
+     * Universal binary https://incenp.org/notes/2023/universal-java-app-on-macos.html
+     * Modifications in: https://forum.vassalengine.org/t/how-to-bundle-java-in-a-universal-macos-app/77991 
+
+* macOS build / bundle attempts
+
+ ```
 jpackage --type app-image --app-version 4.4 --copyright ""  --description "J(ava) Logic Simulator" \
     --icon  /Users/bsiever/git/JLS/macOS/icon/JLSicon.icns  \
     --mac-package-identifier "info.siever.JLS"  --mac-package-name "JLS" \
@@ -44,75 +50,14 @@ jpackage --type app-image --app-version 4.4 --copyright ""  --description "J(ava
     --runtime-image /Users/bsiever/git/JLS/macOS/jre/universal/jdk-21.0.3+9-jre/Contents/jre \
     --input contents --main-jar JLS.jar --main-class jls.JLS \
     --mac-sign 
-
 ```
 
-Trying to open .jpackage.xml and failing. 
-It's using: /Users/bsiever/Library/Containers/info.siever.JLS/Data 
-
-Bundle:
 ```
-jpackage --type app-image --app-version 4.3 --copyright ""  --description "J(ava) Logic Simulator" \
+jpackage --type dmg --app-version 4.3 --copyright ""  --description "J(ava) Logic Simulator" \
     --icon  /Users/bsiever/git/JLS/macOS/icon/icon.icns  \
     --mac-package-identifier "info.siever.JLS"  --mac-package-name "JLS" \
     --file-associations /Users/bsiever/git/JLS/macOS/associations.info \
     --runtime-image /Users/bsiever/git/JLS/macOS/jre/universal/jdk-21.0.3+9-jre/Contents/jre \
     --input contents --main-jar JLS.jar --main-class jls.JLS \
-    --mac-sign  --mac-app-category education 
+    --mac-sign  --mac-app-category education --mac-app-store --license-file LICENSE  --type dmg`    
 ```
-
---mac-app-store --license-file LICENSE  --type dmg
-
-
-
-See https://munier.perso.univ-pau.fr/temp/jdk-7u45-apidocs/technotes/guides/jweb/packagingAppsForMac.html 
-
-See: https://incenp.org/notes/2023/universal-java-app-on-macos.html
-And modifications in: https://forum.vassalengine.org/t/how-to-bundle-java-in-a-universal-macos-app/77991 
-
-Download latest OpenJDK JREs with hotspot: https://adoptium.net/temurin/releases/?os=mac 
-
-Info.plist based on https://gist.github.com/joaopms/359919334292cfbb96fb 
-
-
-
-jpackage --type app-image -i contents --main-class jls.JLS --main-jar JLS.jar --runtime-image /Users/bsiever/git/JLS/macOS/jre/universal/jdk-21.0.3+9-jre/Contents/jre 
-
-
-
-
---name JLS --type app-image --mac-package-identifier "info.siever.JLS" --mac-package-name "JLS" \
-  --file-associations /Users/bsiever/git/JLS/macOS/associations.info \
-  \
-
-
-
-
-
-jpackage --name JLS --type app-image --mac-package-identifier "info.siever.JLS" --mac-package-name "JLS" \
-  --file-associations /Users/bsiever/git/JLS/macOS/associations.info \
-  --runtime-image /Users/bsiever/git/JLS/macOS/jre/universal/jdk-21.0.3+9-jre/Contents/jre \
-  -i contents --main-class jls.JLS --main-jar JLS.jar 
-  
-  
-  
-   --icon  /Users/bsiever/git/JLS/macOS/icon/icon.icns
-
-
-
-jpackage --type app-image --app-version 4.3 --copyright ""  --description "J(ava) Logic Simulator" \
-    --icon  /Users/bsiever/git/JLS/macOS/icon/icon.icns  \
-    --mac-package-identifier "info.siever.JLS"  --mac-package-name "JLS" \
-    --file-associations /Users/bsiever/git/JLS/macOS/associations.info \
-    --runtime-image /Users/bsiever/git/JLS/macOS/jre/universal/jdk-21.0.3+9-jre/Contents/jre \
-    --input contents --main-jar JLS.jar --main-class jls.JLS \
-    --mac-sign --mac-app-store --mac-app-category education  --verbose
-    
-    
-    
-    --license-file ./LICENSE \
-    --app-image .
-   
-   
-   
-   --about-url "https://github.com/bsiever/JLS"
