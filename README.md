@@ -37,6 +37,10 @@ A digital logic simulator, written in Java.
   
   * https://cloudconvert.com/   
   * https://xconvertx.com/convert/svg_to_icns/
+* Convert SVGs to ico 
+  * `brew install ImageMagick`
+  * `mogrify -format ico -density 1200 -background transparent -trim -resize 256x256 -gravity center -extent 256x256 -define icon:auto-resize *.svg`  (https://superuser.com/questions/260047/batch-convert-svg-images-to-desired-size-png-or-ico)
+  
 * Package specific resources
 
 * [jpackage](https://docs.oracle.com/en/java/javase/19/jpackage/packaging-overview.html) for creating Java packages

@@ -1,7 +1,14 @@
 #!/bin/sh -x
 
+# SVG conversion to ico 
+
+mogrify -format ico -density 1200 -background transparent -trim -resize 256x256 -gravity center -extent 256x256 -define icon:auto-resize *.svg
+mv *.ico icons/
+
+
 # https://gist.github.com/adriansr/1da9b18a8076b0f8a977a5eea0ae41ef
 
+# SVG conversions to ICNS
 set -e
 
 SIZES="
