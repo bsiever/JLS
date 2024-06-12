@@ -5,14 +5,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.awt.desktop.OpenFilesEvent;
+import java.awt.desktop.OpenFilesHandler;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -28,6 +30,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.Vector;
@@ -48,7 +51,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
@@ -517,8 +519,26 @@ public class JLSStart extends JFrame implements ChangeListener {
 	        
 	        // If on Mac, swap meta to have copy/paste/cut work
             String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
-            if(OS.indexOf("mac") >=0 || OS.indexOf("darwin")>=0) {
-    	        // https://stackoverflow.com/questions/1852433/use-default-keymap-of-native-os 
+            if(OS.indexOf("mac") >=0 || OS.indexOf("darwin")>=0 || OS.indexOf("os x") >=0) {
+            	// Setup file open 
+            	Desktop a = Desktop.getDesktop();
+                a.setOpenFileHandler(new OpenFilesHandler() {
+
+					@Override
+					public void openFiles(OpenFilesEvent e) {
+						List<File> files = e.getFiles();
+						if(files.size()>0) {
+							String fileName = files.get(0).getAbsolutePath();
+                			open(fileName);
+						}
+					}
+                	
+                }); 
+                
+            	
+            	
+            	// Set up copy/paste/cut
+            	// https://stackoverflow.com/questions/1852433/use-default-keymap-of-native-os 
     	        java.awt.Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
 
     	        	// Check for Command-C, Command-V, and Command-X on Mac and re-map them to control. 
@@ -543,39 +563,7 @@ public class JLSStart extends JFrame implements ChangeListener {
     	                }
     	            }
     	        }, KeyEvent.KEY_EVENT_MASK);            	
-            }
-
-            /*
-
-
-            String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
-            if(OS.indexOf("mac") >=0 || OS.indexOf("darwin")>=0) {
-    	        // https://stackoverflow.com/questions/1852433/use-default-keymap-of-native-os 
-    	        java.awt.Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
-
-    	            public void eventDispatched(AWTEvent event) {
-    	                KeyEvent kev = (KeyEvent) event;
-    	                if (kev.getID() == KeyEvent.KEY_PRESSED || 
-    	                	kev.getID() == KeyEvent.KEY_RELEASED || 
-    	                	kev.getID() == KeyEvent.KEY_PRESSED) {
-    	                    if ((kev.getModifiersEx() & KeyEvent.META_DOWN_MASK) != 0 && !((kev.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
-    	                        kev.consume(); // Drop the original event, this is really optional.
-    	                        KeyEvent fake = new KeyEvent(kev.getComponent(),
-    	                                kev.getID(),
-    	                                kev.getWhen(),
-    	                                (kev.getModifiersEx() & ~KeyEvent.META_DOWN_MASK) | KeyEvent.CTRL_DOWN_MASK,
-    	                                kev.getKeyCode(), kev.getKeyChar());
-    	                        java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(fake);
-    	                    }
-    	                }
-    	            }
-    	        }, KeyEvent.KEY_EVENT_MASK);            	
-            }
-
-
-             */
-            
-            
+            }            
 		}
 		catch (Exception ex) {
 
