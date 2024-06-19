@@ -106,23 +106,25 @@ public class ShiftRegister extends LogicElement {
 			width = 2*s;
 			height = 2*s;
 		}
+		
+		int shiftAmountBits = (int)Math.ceil(Math.log(bits)/Math.log(2));
 				
 		// create select input
 		if(selectorOrientation == JLSInfo.Orientation.DOWN)
 		{
-			inputs.add(new Input("amount",this,s,height,bits));
+			inputs.add(new Input("amount",this,s,height,shiftAmountBits));
 		}
 		else if(selectorOrientation == JLSInfo.Orientation.UP)
 		{
-			inputs.add(new Input("amount",this,s,0,bits));
+			inputs.add(new Input("amount",this,s,0,shiftAmountBits));
 		}
 		else if(selectorOrientation == JLSInfo.Orientation.LEFT)
 		{
-			inputs.add(new Input("amount",this,0,s,bits));
+			inputs.add(new Input("amount",this,0,s,shiftAmountBits));
 		}
 		else if(selectorOrientation == JLSInfo.Orientation.RIGHT)
 		{
-			inputs.add(new Input("amount",this,width,s,bits));
+			inputs.add(new Input("amount",this,width,s,shiftAmountBits));
 		}
 		
 		if(outputOrientation == JLSInfo.Orientation.RIGHT)
@@ -155,7 +157,7 @@ public class ShiftRegister extends LogicElement {
 	} // end of init method
 	
 	/**
-	 * Draw this mux.
+	 * Draw this sr.
 	 * 
 	 * @param g The graphics object to draw with.
 	 */
@@ -824,7 +826,7 @@ public class ShiftRegister extends LogicElement {
 				dispose();
 			}
 			
-			// if cancel button, cancel mux creation
+			// if cancel button, cancel sr creation
 			else if (event.getSource() == cancel) {
 				cancel();
 			}
@@ -832,7 +834,7 @@ public class ShiftRegister extends LogicElement {
 		} // end of actionPerformed method
 		
 		/**
-		 * Cancel this mux.
+		 * Cancel this sr.
 		 */
 		private void cancel() {
 			
@@ -841,7 +843,7 @@ public class ShiftRegister extends LogicElement {
 			dispose();
 		} // end of cancel method
 		
-	} // end of MuxCreate class
+	} // end of ShiftRegister Create class
 	
 
 //	-------------------------------------------------------------------------------

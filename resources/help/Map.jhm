@@ -68,6 +68,7 @@
 	<mapID target="register" url="elements/memory/register.html" />
 	<mapID target="memory" url="elements/memory/memory.html" />
 	<mapID target="mux" url="elements/components/mux.html" />
+	<mapID target="shiftregister" url="elements/components/shiftregister.html" />
 	<mapID target="adder" url="elements/components/adder.html" />
 	<mapID target="decoder" url="elements/components/decoder.html" />
 	<mapID target="clock" url="elements/timing/clock.html" />
