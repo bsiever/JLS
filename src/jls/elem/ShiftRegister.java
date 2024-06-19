@@ -107,7 +107,7 @@ public class ShiftRegister extends LogicElement {
 			height = 2*s;
 		}
 		
-		int shiftAmountBits = (int)Math.ceil(Math.log(bits)/Math.log(2));
+		int shiftAmountBits = 32 - Integer.numberOfLeadingZeros(bits-1);
 				
 		// create select input
 		if(selectorOrientation == JLSInfo.Orientation.DOWN)
