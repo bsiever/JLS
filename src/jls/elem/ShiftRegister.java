@@ -13,20 +13,26 @@ import javax.swing.*;
  * 
  * @author David A. Poplawski
  */
-public class Mux extends LogicElement {
+public class ShiftRegister extends LogicElement {
 
 	// default values
-	private static final int defaultInputs = 2;
-	private static final int defaultBits = 1;
+	private static final int defaultBits = 8;
 	private static final int defaultPropDelay = 25; 
 	
 	// saved properties
-	private int numInputs = defaultInputs;
 	private int bits = defaultBits;
 	private int propDelay = defaultPropDelay;
 	private JLSInfo.Orientation outputOrientation = JLSInfo.Orientation.RIGHT;
 	private JLSInfo.Orientation selectorOrientation = JLSInfo.Orientation.DOWN;
 	
+	
+	public enum Type { 
+		LogicalLeft, 
+		LogicalRight, 
+		ArithmeticRight
+	}
+	private Type type = Type.LogicalLeft;
+		
 	// running properties
 	private boolean cancelled;
 
@@ -35,7 +41,7 @@ public class Mux extends LogicElement {
 	 * 
 	 * @param circuit The circuit this element is part of.
 	 */
-	public Mux(Circuit circuit) {
+	public ShiftRegister(Circuit circuit) {
 		
 		super(circuit);
 	} // end of constructor
@@ -56,10 +62,10 @@ public class Mux extends LogicElement {
 		Point pos = editWindow.getMousePosition();
 		Point win = editWindow.getLocationOnScreen();
 		if (pos == null) {
-			new MuxCreate(x+win.x,y+win.y);
+			new SRCreate(x+win.x,y+win.y);
 		}
 		else {
-			new MuxCreate(pos.x+win.x,pos.y+win.y);
+			new SRCreate(pos.x+win.x,pos.y+win.y);
 		}
 		
 		// don't do anything if user cancelled element
@@ -92,79 +98,58 @@ public class Mux extends LogicElement {
 		
 		if(outputOrientation == JLSInfo.Orientation.LEFT || outputOrientation == JLSInfo.Orientation.RIGHT)
 		{
-			height = (numInputs+1)*s;
+			height = 2*s;
 			width = 2*s;
 		}
 		else
 		{
-			width = (numInputs+1)*s;
+			width = 2*s;
 			height = 2*s;
 		}
-		
-		// determine number of select bits
-		int sbits = 32 - Integer.numberOfLeadingZeros(numInputs-1);
-		
-		// TODO
+				
 		// create select input
 		if(selectorOrientation == JLSInfo.Orientation.DOWN)
 		{
-			inputs.add(new Input("select",this,s,height,sbits));
+			inputs.add(new Input("amount",this,s,height,bits));
 		}
 		else if(selectorOrientation == JLSInfo.Orientation.UP)
 		{
-			inputs.add(new Input("select",this,s,0,sbits));
+			inputs.add(new Input("amount",this,s,0,bits));
 		}
 		else if(selectorOrientation == JLSInfo.Orientation.LEFT)
 		{
-			inputs.add(new Input("select",this,0,s,sbits));
+			inputs.add(new Input("amount",this,0,s,bits));
 		}
 		else if(selectorOrientation == JLSInfo.Orientation.RIGHT)
 		{
-			inputs.add(new Input("select",this,width,s,sbits));
+			inputs.add(new Input("amount",this,width,s,bits));
 		}
 		
-		
-		// TODO
-		int ypos = s;
 		if(outputOrientation == JLSInfo.Orientation.RIGHT)
 		{
 			// create inputs
-			for (int i=0; i<numInputs; i+=1) {
-				inputs.add(new Input("input"+i,this,0,ypos,bits));
-				ypos += s;
-			}
+			inputs.add(new Input("input",this,0,s,bits));
 			// create output
-			outputs.add(new Output("output",this,width,(numInputs+1)/2*s,bits));
+			outputs.add(new Output("output",this,width,s,bits));
 		}
 		else if(outputOrientation == JLSInfo.Orientation.LEFT)
 		{
-			// create inputs
-			for (int i=0; i<numInputs; i+=1) {
-				inputs.add(new Input("input"+i,this,width,ypos,bits));
-				ypos += s;
-			}
+			inputs.add(new Input("input",this,width,s,bits));
 			// create output
-			outputs.add(new Output("output",this,0,(numInputs+1)/2*s,bits));
+			outputs.add(new Output("output",this,0,s,bits));
 		}
 		else if(outputOrientation == JLSInfo.Orientation.DOWN)
 		{
 			// create inputs
-			for (int i=0; i<numInputs; i+=1) {
-				inputs.add(new Input("input"+i,this,ypos,0,bits));
-				ypos += s;
-			}
+			inputs.add(new Input("input",this,s,0,bits));
 			// create output
-			outputs.add(new Output("output",this,(numInputs+1)/2*s,height,bits));
+			outputs.add(new Output("output",this,s,height,bits));
 		}
 		else if(outputOrientation == JLSInfo.Orientation.UP)
 		{
-			// create inputs
-			for (int i=0; i<numInputs; i+=1) {
-				inputs.add(new Input("input"+i,this,ypos,height,bits));
-				ypos += s;
-			}
+			inputs.add(new Input("input",this,s,height,bits));
 			// create output
-			outputs.add(new Output("output",this,(numInputs+1)/2*s,0,bits));
+			outputs.add(new Output("output",this,s,0,bits));
 		}
 		
 	} // end of init method
@@ -181,34 +166,14 @@ public class Mux extends LogicElement {
 		
 		// draw shape
 //		int s = JLSInfo.spacing;
-		int offset = JLSInfo.spacing/2; 
 		g.setColor(Color.black);
 		
-		// Prototype for trapezoid 
-		// Needs to adjust output and input too.
-		if(outputOrientation == JLSInfo.Orientation.RIGHT)
-		{
-			g.drawLine(x,y,x,y+height);             // Left
-			g.drawLine(x+width,y+offset,x+width,y+height-offset); // Right
-			g.drawLine(x,y,x+width,y+offset);              // Top
-			g.drawLine(x,y+height,x+width,y+height-offset); // Bottom
-		} else if(outputOrientation == JLSInfo.Orientation.LEFT) {
-			g.drawLine(x,y+offset,x,y+height-offset);             // Left
-			g.drawLine(x+width,y,x+width,y+height);         // Right
-			g.drawLine(x,y+offset,x+width,y);              // Top
-			g.drawLine(x,y+height-offset,x+width,y+height); // Bottom
-		} else if(outputOrientation == JLSInfo.Orientation.UP) {
-			g.drawLine(x+offset,y,x+width-offset,y);             // Top
-			g.drawLine(x,y+height,x+width,y+height);         // Bottom
-			g.drawLine(x+offset,y,x,y+height);              // Left
-			g.drawLine(x+width-offset,y,x+width,y+height); // Right
-		} else {  // DOWN
-			g.drawLine(x,y,x+width,y);             // Top
-			g.drawLine(x+offset,y+height,x+width-offset,y+height);         // Bottom
-			g.drawLine(x,y,x+offset,y+height);              // Left
-			g.drawLine(x+width,y,x+width-offset,y+height); // Right	
-		}
-		
+		// Square 
+		g.drawLine(x,y,x+width,y);             // Top
+		g.drawLine(x,y+height,x+width,y+height);         // Bottom
+		g.drawLine(x,y,x,y+height);              // Left
+		g.drawLine(x+width,y,x+width,y+height); // Right	
+
 		// draw inputs and labels
 		FontMetrics fm = g.getFontMetrics();
 		int ascent = fm.getAscent();
@@ -223,54 +188,26 @@ public class Mux extends LogicElement {
 					g.setColor(Color.BLACK);
 					if(outputOrientation == JLSInfo.Orientation.RIGHT)
 					{
-						g.drawString(inum+"",x+d2,input.getY()-hi/2+ascent);			
+						g.drawString("in",x+d2,input.getY()-hi/2+ascent);			
 					}
 					else if(outputOrientation == JLSInfo.Orientation.LEFT)
 					{
-						g.drawString(inum+"",x+width-5*d2,input.getY()-hi/2+ascent);
+						g.drawString("in",x+width-5*d2,input.getY()-hi/2+ascent);
 					}
 					else if(outputOrientation == JLSInfo.Orientation.UP || outputOrientation == JLSInfo.Orientation.DOWN)
 					{
-						g.drawString(inum+"",input.getX()-4,y+5*d2);
+						g.drawString("in",input.getX()-4,y+5*d2);
 					}
-				}
+				} 
 				inum += 1;
 			}
 		}
 		if(outputOrientation == JLSInfo.Orientation.UP || outputOrientation == JLSInfo.Orientation.DOWN)
 		{
-			if(inputs.size() == 3)
-			{
-				
-				inputs.get(0).draw(g);
-				inputs.get(1).draw(g);
-				inputs.get(2).draw(g);
-				g.setColor(Color.BLACK);
-				g.drawString("0",inputs.get(1).getX()-4,y+5*d2);
-				g.drawString("1",inputs.get(2).getX()-4,y+5*d2);
-			}
-			else
-			{
-				for (Input input : inputs) {
-					input.draw(g);
-					if (inum >= 0 && inum%2 == 0) {
-						g.setColor(Color.BLACK);
-						if(outputOrientation == JLSInfo.Orientation.RIGHT)
-						{
-						g.drawString(inum+"",x+d2,input.getY()-hi/2+ascent);			
-						}
-						else if(outputOrientation == JLSInfo.Orientation.LEFT)
-						{
-							g.drawString(inum+"",x+width-5*d2,input.getY()-hi/2+ascent);
-						}
-						else if(outputOrientation == JLSInfo.Orientation.UP || outputOrientation == JLSInfo.Orientation.DOWN)
-						{
-							g.drawString(inum+"",input.getX()-4,y+5*d2);
-						}
-					}
-					inum += 1;
-				}
-			}
+			inputs.get(0).draw(g);
+			inputs.get(1).draw(g);
+			g.setColor(Color.BLACK);
+			g.drawString("in",inputs.get(1).getX()-4,y+5*d2);
 		}
 		
 		// draw output
@@ -286,9 +223,7 @@ public class Mux extends LogicElement {
 	 */
 	public void setValue(String name, int value) {
 		
-		if (name.equals("inputs")) {
-			numInputs = value;
-		} else if (name.equals("bits")) {
+		if (name.equals("bits")) {
 			bits = value;
 		} else if (name.equals("delay")) {
 			propDelay = value;
@@ -304,8 +239,9 @@ public class Mux extends LogicElement {
 	 * @param value The instance variable value.
 	 */
 	public void setValue(String name, String value) {
-		
-		if (name.equals("iOrient")) {
+		if (name.equals("type")) {
+			type = Type.valueOf(value);
+		} else if (name.equals("iOrient")) {
 			if(value.equals("LEFT"))
 			{
 				outputOrientation = JLSInfo.Orientation.LEFT;
@@ -355,9 +291,9 @@ public class Mux extends LogicElement {
 	 */
 	public void save(PrintWriter output) {
 		
-		output.println("ELEMENT Mux");
+		output.println("ELEMENT ShiftRegister");
 		super.save(output);
-		output.println(" int inputs " + numInputs);
+		output.println(" String type \"" + type.name() + "\"");
 		output.println(" int bits " + bits);
 		output.println(" int delay " + propDelay);
 		output.println(" String iOrient \"" + outputOrientation.toString() + "\"");
@@ -372,12 +308,12 @@ public class Mux extends LogicElement {
 	 */
 	public Element copy() {
 		
-		Mux it = new Mux(circuit);
-		it.numInputs = numInputs;
+		ShiftRegister it = new ShiftRegister(circuit);
 		it.bits = bits;
 		it.propDelay = propDelay;
 		it.outputOrientation = outputOrientation;
 		it.selectorOrientation = selectorOrientation;
+		it.type = type;
 		for (Input input : inputs) {
 			it.inputs.add(input.copy(it));
 		}
@@ -395,7 +331,23 @@ public class Mux extends LogicElement {
 	 */
 	public void showInfo(JLabel info) {
 		
-		info.setText(numInputs + " input, " + bits + " bit multiplexor");
+		String kind = null; 
+		switch(type) {
+		case LogicalLeft:
+			kind = "Logical left";
+			break;
+		case LogicalRight:
+			kind = "Logical right";
+			break;
+		case ArithmeticRight:
+			kind = "Arithmetic right";
+			break;
+				
+		default:
+			kind = "ERROR";
+
+		}
+		info.setText(kind + " shift register (" +  bits + ")");
 	} // end of showInfo method
 
 	/**
@@ -437,7 +389,7 @@ public class Mux extends LogicElement {
 	} // end of setDelay method
 	
 	/**
-	 * Tells if a mux is capable of flipping, can only flip when inputs or outputs have no attachments.
+	 * Tells if a SR is capable of flipping, can only flip when inputs or outputs have no attachments.
 	 * @return False if any input or output has a wire attached, True otherwise
 	 */
 	public boolean canFlip()
@@ -463,7 +415,7 @@ public class Mux extends LogicElement {
 	}
 	
 	/**
-	 * This method will flip a mux's selector
+	 * This method will flip a SR's selector
 	 * @param g The current graphics context to facilitate recalculation of size when flipping
 	 */
 	public void flip(Graphics g)
@@ -492,7 +444,7 @@ public class Mux extends LogicElement {
 	}
 	
 	/**
-	 *  This method will rotate the mux if it is rotateable.
+	 *  This method will rotate the SR if it is rotateable.
 	 * @param direction The direction to rotate
 	 * @param g The current graphics context for use in recalculating size
 	 */
@@ -579,7 +531,7 @@ public class Mux extends LogicElement {
 	}
 	
 	/**
-	 * Tells if a mux is capable of rotatating, can only rotate when inputs or outputs have no attachments.
+	 * Tells if a SR is capable of rotatating, can only rotate when inputs or outputs have no attachments.
 	 * @return False if any input or output has a wire attached, True otherwise
 	 */
 	public boolean canRotate()
@@ -607,16 +559,16 @@ public class Mux extends LogicElement {
 	/**
 	 * Dialog box to set inputs and bits.
 	 */
-	protected class MuxCreate extends JDialog implements ActionListener {
+	protected class SRCreate extends JDialog implements ActionListener {
 		
-		private static final long serialVersionUID = -1010347440979624597L;
+		private static final long serialVersionUID = 5283714377285864030L;
 		// properties
 		private JButton ok = new JButton("OK");
 		private JButton cancel = new JButton("Cancel");
-		private JTextField inputsField = new JTextField(defaultInputs+"",5);
 		private JTextField bitsField = new JTextField(defaultBits+"",5);
-		private KeyPad inputsPad = new KeyPad(inputsField,10,defaultInputs,this);
 		private KeyPad bitsPad = new KeyPad(bitsField,10,defaultBits,this);
+		
+		
 		private JRadioButton oLeft = new JRadioButton("Left");
 		private JRadioButton oRight = new JRadioButton("Right", true);
 		private JRadioButton oUp = new JRadioButton("Up");
@@ -625,7 +577,13 @@ public class Mux extends LogicElement {
 		private JRadioButton sRight = new JRadioButton("Right");
 		private JRadioButton sUp = new JRadioButton("Up");
 		private JRadioButton sDown = new JRadioButton("Down",true);
-		private JLabel olbl2 = new JLabel("Selector Orientation");
+		
+		private JRadioButton shiftLeft = new JRadioButton("Shift Left",true);
+		private JRadioButton shiftRight = new JRadioButton("Shift Right",true);
+		private JRadioButton shiftRightArithmetic = new JRadioButton("Shift Right Arithmetic",true);
+		
+		
+		private JLabel olbl2 = new JLabel("Amount Orientation");
 		
 		/**
 		 * Set up dialog window.
@@ -633,10 +591,10 @@ public class Mux extends LogicElement {
 		 * @param x The x-coordinate of the position of the dialog.
 		 * @param y The y-coordinate of the position of the dialog.
 		 */
-		protected MuxCreate(int x, int y) {
+		protected SRCreate(int x, int y) {
 			
 			// set up window title
-			super(JLSInfo.frame,"Create Multiplexor",true);
+			super(JLSInfo.frame,"Create Shift Register",true);
 			
 			// set not cancelled
 			cancelled = false;
@@ -647,13 +605,7 @@ public class Mux extends LogicElement {
 			
 			// set up input panel
 			JPanel info = null;
-			info = new JPanel(new GridLayout(2,2));
-			JLabel inputs = new JLabel("Inputs: ",SwingConstants.RIGHT);
-			info.add(inputs);
-			JPanel in = new JPanel(new FlowLayout());
-			in.add(inputsField);
-			in.add(inputsPad);
-			info.add(in);
+			info = new JPanel(new GridLayout(1,2));
 			
 			JLabel gates;
 			gates = new JLabel("Bits: ",SwingConstants.RIGHT);
@@ -663,7 +615,25 @@ public class Mux extends LogicElement {
 			ga.add(bitsPad);
 			info.add(ga);
 			window.add(info);
-			
+
+			JPanel typePanel = new JPanel(new GridLayout(3,1));
+			ButtonGroup typeButtons = new ButtonGroup();
+			typeButtons.add(this.shiftLeft);
+			typeButtons.add(this.shiftRight);
+			typeButtons.add(this.shiftRightArithmetic);
+			JLabel tlbl = new JLabel("Shift Type");
+			tlbl.setAlignmentX(Component.CENTER_ALIGNMENT);
+			window.add(tlbl);
+			typePanel.add(this.shiftLeft);
+			typePanel.add(this.shiftRight);
+			typePanel.add(this.shiftRightArithmetic);
+
+			typePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			JPanel containingPanel = new JPanel();
+			containingPanel.add(typePanel);
+			containingPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			window.add(containingPanel);
+
 			JPanel orient = new JPanel(new GridLayout(3,3));
 			JPanel orient2 = new JPanel(new GridLayout(3,3));
 			ButtonGroup gr = new ButtonGroup();
@@ -685,7 +655,6 @@ public class Mux extends LogicElement {
 			orient.add(new JLabel(""));
 			orient.add(this.oDown);
 			orient.add(new JLabel(""));
-			
 			
 			orient2.add(new JLabel(""));
 			orient2.add(this.sUp);
@@ -720,13 +689,13 @@ public class Mux extends LogicElement {
 			if (JLSInfo.hb == null)
 				Util.noHelp(help);
 			else
-				JLSInfo.hb.enableHelpOnButton(help,"mux",null);
+				// TODO: Add help stuff
+				JLSInfo.hb.enableHelpOnButton(help,"shiftregister",null);
 			okCancel.add(help);
 			window.add(okCancel);
 			getRootPane().setDefaultButton(ok);
 			
 			ok.addActionListener(this);
-			inputsField.addActionListener(this);
 			bitsField.addActionListener(this);
 			cancel.addActionListener(this);
 			oLeft.addActionListener(this);
@@ -734,7 +703,7 @@ public class Mux extends LogicElement {
 			oUp.addActionListener(this);
 			oDown.addActionListener(this);
 			
-			// set up window close listener to cancel mux
+			// set up window close listener to cancel SR
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			addWindowListener (
 					new WindowAdapter() {
@@ -780,31 +749,28 @@ public class Mux extends LogicElement {
 			}
 			
 			// if ok button, check values for validity
-			if (event.getSource() == ok || event.getSource() == inputsField || event.getSource() == bitsField) {
+			if (event.getSource() == ok ||  event.getSource() == bitsField) {
 				try {
-					numInputs = Integer.parseInt(inputsField.getText());
 					bits = Integer.parseInt(bitsField.getText());
 				}
 				catch (NumberFormatException ex) {
 					JOptionPane.showMessageDialog(this,
 							"Value not numeric, try again", "Error",
 							JOptionPane.ERROR_MESSAGE);
-					numInputs = -1;
 					return;
 				}
-				if (numInputs < 2) {
+				if (bits < 2) {
 					JOptionPane.showMessageDialog(this,
-							"Must have at least 2 inputs", "Error",
+							"Must be at least two bits", "Error",
 							JOptionPane.ERROR_MESSAGE);
-					numInputs = -1;
 					return;
 				}
-				if (bits < 1) {
-					JOptionPane.showMessageDialog(this,
-							"Must be at least one bit", "Error",
-							JOptionPane.ERROR_MESSAGE);
-					numInputs = -1;
-					return;
+				if(this.shiftRight.isSelected()) {
+					type = ShiftRegister.Type.LogicalRight;
+				} else if(this.shiftRightArithmetic.isSelected()){
+					type = ShiftRegister.Type.ArithmeticRight;
+				} else {
+					type = ShiftRegister.Type.LogicalLeft;					
 				}
 				if(this.oLeft.isSelected())
 				{
@@ -854,7 +820,6 @@ public class Mux extends LogicElement {
 						selectorOrientation = JLSInfo.Orientation.RIGHT;
 					}
 				}
-				inputsPad.close();
 				bitsPad.close();
 				dispose();
 			}
@@ -872,7 +837,6 @@ public class Mux extends LogicElement {
 		private void cancel() {
 			
 			cancelled = true;
-			inputsPad.close();
 			bitsPad.close();
 			dispose();
 		} // end of cancel method
@@ -913,25 +877,45 @@ public class Mux extends LogicElement {
 		// if an input has changed ...
 		if (todo == null) {
 			
-			// get the selector input
+			// get the amount to shift
 			BitSet bw = inputs.get(0).getValue();
 			if (bw == null)
 				bw = new BitSet();
-			int which = BitSetUtils.ToInt(bw);
+			int amount = BitSetUtils.ToInt(bw);
 			
-			// get the selected input
-			BitSet newValue;
-			if (which >= numInputs) {
-				newValue = new BitSet(1);
+			// Get the input value too
+			BitSet input = inputs.get(1).getValue();
+			BitSet newValue = new BitSet(bits);
+
+			switch(type) {
+			case LogicalLeft:
+				for(int i=bits-1; i>=0;i--) {
+					if(i-amount>=0) {
+						newValue.set(i,input.get(i-amount));
+					} 
+				}
+				break;
+			case LogicalRight:
+				for(int i=0; i<bits;i++) {
+					if(i+amount<bits) {
+						newValue.set(i,input.get(i+amount));
+					} 
+				}
+				break;
+			case ArithmeticRight:
+				for(int i=0; i<bits;i++) {
+					if(i+amount<bits) {
+						newValue.set(i,input.get(i+amount));
+					} else {
+						// Copy sign bit
+						newValue.set(i,input.get(bits-1));						
+					}
+				}
 			}
-			else {
-				newValue = inputs.get(which+1).getValue();
-				if (newValue == null)
-					newValue = new BitSet();
-			}
-	
+			
+			
 			// if new value is different from the value propagating through
-			// the mux, then post an event
+			// the SR, then post an event
 			if (!newValue.equals(toBeValue)) {
 				toBeValue = (BitSet)newValue.clone();
 				sim.post(new SimEvent(now+propDelay,this,newValue));
@@ -943,10 +927,10 @@ public class Mux extends LogicElement {
 			BitSet value = (BitSet)todo;
 			
 			// send to output
-			Output sumOut = outputs.get(0);
-			sumOut.propagate(value,now,sim);
+			Output srOut = outputs.get(0);
+			srOut.propagate(value,now,sim);
 		}
 		
 	} // end of react method
 
-} // end of Mux class
+} // end of SR class

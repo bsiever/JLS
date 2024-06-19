@@ -76,6 +76,7 @@ import jls.elem.OutputPin;
 import jls.elem.Pause;
 import jls.elem.Put;
 import jls.elem.Register;
+import jls.elem.ShiftRegister;
 import jls.elem.SigGen;
 import jls.elem.Splitter;
 import jls.elem.StateMachine;
@@ -1004,7 +1005,7 @@ public abstract class SimpleEditor extends JPanel {
 
 				toolbar.add(Box.createRigidArea(new Dimension(5,0)));
 
-				JPanel comb = new JPanel(new GridLayout(2,2));
+				JPanel comb = new JPanel(new GridLayout(2,3));
 
 				image = getImage("mux");
 				text = image == null ? "MUX" : "";
@@ -1024,6 +1025,16 @@ public abstract class SimpleEditor extends JPanel {
 				};
 				comb.add(makeElement(act,"decoder"));
 
+				image = getImage("shiftregister");
+				text = image == null ? "SR" : "";
+				act = new AbstractAction(text,image) {
+					public void actionPerformed(ActionEvent event) {
+						setup(new ShiftRegister(circuit),event.getSource() instanceof JButton);
+					}
+				};
+				comb.add(makeElement(act,"shift register"));
+
+				
 				image = getImage("adder");
 				text = image == null ? "ADDER" : "";
 				act = new AbstractAction(text,image) {
