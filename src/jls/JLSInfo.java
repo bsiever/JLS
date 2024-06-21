@@ -49,7 +49,7 @@ public final class JLSInfo {
 		Color.lightGray;									// initial states of state machines
 	public static final int checkPointFreq = 10;			// how many changes between checkpoint file writes
 	public static final int undoStackDepth = 10;			// maximum number of undos
-	public static final long defaultTimeLimit = 100000000;		// default simulation time
+	public static final long defaultTimeLimit = 1_000_000;		// default simulation time
 	public static Frame frame = null;					// for dialog boxes
 	public static Simulator sim = null;					// for undo/redo
 	public static boolean isApplet = false;				// set to true by applet

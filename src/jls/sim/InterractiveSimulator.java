@@ -6,6 +6,7 @@ import jls.edit.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.print.*;
+
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import java.util.concurrent.*;
@@ -239,6 +240,8 @@ public final class InterractiveSimulator extends Simulator {
 		// trace area
 		final JScrollPane spane = new JScrollPane(traces);
 		window.add(spane,BorderLayout.CENTER);
+		spane.setHorizontalScrollBarPolicy(
+				   JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		// handle window events
 		window.addComponentListener(
@@ -1038,7 +1041,6 @@ public final class InterractiveSimulator extends Simulator {
 		 * Repaint all the trace objects.
 		 */
 		private void draw() {
-
 			repaint();
 			for (Trace tr : traceList) {
 				tr.commit(now);
@@ -1160,6 +1162,7 @@ public final class InterractiveSimulator extends Simulator {
 		 * Draw the slider and the time the slider indicates.
 		 */
 		public void paintComponent(Graphics g) {
+			// TODO: Major performance problem w/ long runs???
 
 			super.paintComponent(g);
 			int width = getWidth()-parent.getNameSpace()-10;

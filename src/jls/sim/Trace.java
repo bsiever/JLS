@@ -164,6 +164,7 @@ public class Trace extends JPanel implements MouseListener, MouseMotionListener 
 		int height = ascent + descent;
 		int baseline = HEIGHT/2 - height/2 + ascent;
 		g.setColor(Color.black);
+		// Name shown on right
 		g.drawString(name,width+5,baseline);
 		
 		// set up for loop
@@ -204,13 +205,20 @@ public class Trace extends JPanel implements MouseListener, MouseMotionListener 
 		// then draw tics
 		double tpos = width-now/scaleFactor;
 		int value = 0;
+		int count = 0;
 		while (tpos < width) {
+			count++;
+			int strLen = fm.stringWidth(value+" ");
+			int skipN = (int)Math.ceil(strLen / (1.0*inc/scaleFactor));
 			g.setColor(Color.lightGray);
 			g.drawLine((int)Math.rint(tpos), 0, (int)Math.rint(tpos), HEIGHT);
 			
 			// draw value if no changes (i.e., the header)
 			if (changes.isEmpty()) {
-				g.drawString(value+"", (int)Math.rint(tpos)+2, height);
+				// Times shown at top
+				if(count%skipN==0) {
+					g.drawString(value+"", (int)Math.rint(tpos)+2, height);					
+				}
 			}
 			tpos += 1.0*inc/scaleFactor;
 			value += inc;
@@ -246,6 +254,7 @@ public class Trace extends JPanel implements MouseListener, MouseMotionListener 
 							val = BitSetUtils.ToString(change.value,base);
 					int strlen = fm.stringWidth(val) + 2;
 					if (strlen <= rlen) {
+						// Not sure...
 						g.drawString(val,rpos-rlen+(rlen-strlen)/2+1,baseline);
 					}
 				}
@@ -320,6 +329,7 @@ public class Trace extends JPanel implements MouseListener, MouseMotionListener 
 				g.setColor(Color.white);
 				g.fillRect(sliderPos-w-4,baseline-ascent,w+3,height);
 				g.setColor(Color.magenta);
+				// Value shown in cursor (slide-rule like)
 				g.drawString(val,sliderPos-w-1,baseline);
 			}
 		}
