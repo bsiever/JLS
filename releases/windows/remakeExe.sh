@@ -18,4 +18,3 @@ jpackage --type app-image --app-version 4.6 --copyright ""  --description "J(ava
 tar -cvf JLS_windows.zip JLS
 
 
-

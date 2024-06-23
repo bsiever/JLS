@@ -28,11 +28,27 @@ Skip to step 3 if not updating the JRE.
 
 ## Windows
 
+Login to windows, Academic lab;  Open bash and navigate to H:\git\JLS; `git pull`
+Skip to step 3 if not updating the JRE.
+
 1. Get the jre (https://adoptium.net/temurin/releases/), put it in `jre`, and unzip it.  
 2. Copy the JLS jar to the contents folder (`cd releases/windows`, `cp ../JLS.jar contents`)
 3. Update the `remakeExe.sh` script with version number and any changes to jre directory/name. 
 4. Remove old version (remove the JLS director in releases/windows)
 5. Run `remakeExe.sh` 
+
+## GitHub 
+
+Create a Tag for most recent commit.
+Create a release.
+Add .jar and _macOS.zip and .zip from windows to the release. 
+
+## Tagging / Releasing
+
+`git tag -a v4.6.0 -m "Version 4.6 Release"`
+`git push origin tag v4.6.0`
+Got to GitHub repo @ https://github.com/bsiever/JLS/releases and Draft a new release.
+Attach executables.  Need to upload windows (maybe via google drive transfer.  Ugh)
 
 # Misc. notes & debris
 
@@ -45,6 +61,7 @@ Skip to step 3 if not updating the JRE.
 * Convert SVGs to ico 
   * `brew install ImageMagick`
   * `mogrify -format ico -density 1200 -background transparent -trim -resize 256x256 -gravity center -extent 256x256 -define icon:auto-resize *.svg`  (https://superuser.com/questions/260047/batch-convert-svg-images-to-desired-size-png-or-ico)
+
   
 * Package specific resources
 
