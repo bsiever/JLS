@@ -241,7 +241,9 @@ public final class InterractiveSimulator extends Simulator {
 		final JScrollPane spane = new JScrollPane(traces);
 		window.add(spane,BorderLayout.CENTER);
 		spane.setHorizontalScrollBarPolicy(
-				   JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+				   JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		spane.setVerticalScrollBarPolicy(
+				   JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		// handle window events
 		window.addComponentListener(
@@ -932,7 +934,7 @@ public final class InterractiveSimulator extends Simulator {
 		private java.util.List<Trace> traceList = new LinkedList<Trace>();
 		private java.util.List<Trace> newList = new LinkedList<Trace>();
 		private int nameSpace;
-
+		
 		/**
 		 * Set up the window.
 		 */
@@ -1041,11 +1043,12 @@ public final class InterractiveSimulator extends Simulator {
 		 * Repaint all the trace objects.
 		 */
 		private void draw() {
+			// TODO: Figure out scaling and always showing legend and only drawing relevant part?
+			// May need to "Start from scratch" on this to get it to desired state
+			int targetWidth = (int)(now/scaleFactor+50); // 50 is arbitrary offset for initial labels (HACK)
+			resize(targetWidth); 
 			repaint();
-			for (Trace tr : traceList) {
-				tr.commit(now);
-				tr.repaint();
-			}
+			revalidate();
 		} // end of draw method
 
 		/**
@@ -1076,9 +1079,18 @@ public final class InterractiveSimulator extends Simulator {
 		 * @param width The new width.
 		 */
 		private void resize(int width) {
+			int height = HEIGHT;
+			if(traceList.size()>0) {
+				height = traceList.size()*traceList.get(0).getHeight();
+			}
+			setMaximumSize(new Dimension(width,height));
+			setPreferredSize(new Dimension(width,height));
+			setMinimumSize(new Dimension(width,height));
 
 			for (Trace tr : traceList) {
 				tr.resize(width);
+				tr.commit(now);
+				tr.repaint();
 			}
 		} // end of resize method
 

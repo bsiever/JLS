@@ -126,12 +126,13 @@ public class Trace extends JPanel implements MouseListener, MouseMotionListener 
 			previousValue = (BitSet)value.clone();
 //		}
 		ch.when = when;
-		pendingChanges.add(0,ch);
+		pendingChanges.addFirst(ch);
 		
 		// delete undisplayable values
 		// (test for when == 0 due to no width yet)
-		if (when != 0 && pendingChanges.size() > getWidth())
-			pendingChanges.removeLast();
+		// BSIEVER: Disabled to display entire trace. 
+//		if (when != 0 && pendingChanges.size() > getWidth())
+//			pendingChanges.removeLast();
 	} // end of addValue method
 	
 	/**
@@ -331,6 +332,8 @@ public class Trace extends JPanel implements MouseListener, MouseMotionListener 
 				g.setColor(Color.magenta);
 				// Value shown in cursor (slide-rule like)
 				g.drawString(val,sliderPos-w-1,baseline);
+				g.setColor(Color.black);
+				g.drawString(name,sliderPos-w-1,baseline+ascent+3);
 			}
 		}
 		
@@ -380,8 +383,9 @@ public class Trace extends JPanel implements MouseListener, MouseMotionListener 
 		int y = event.getY();
 		
 		// ignore if not in name area
-		if (x <= width)
-			return;
+		// BSIEVER: Removed for scrolling update
+//		if (x <= width)
+//			return;
 		
 		// create popup menu
 		JPopupMenu ask = new JPopupMenu();
