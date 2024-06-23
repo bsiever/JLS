@@ -1,6 +1,8 @@
 #!/bin/sh
 
-jpackage --type app-image --app-version 4.4 --copyright ""  --description "J(ava) Logic Simulator" \
+rm -Rf JLS.app JLS_macOS.zip
+
+jpackage --type app-image --app-version 4.6 --copyright ""  --description "J(ava) Logic Simulator" \
     --name "JLS" \
     --icon  resources/JLS.icns  \
     --resource-dir resources \
@@ -14,6 +16,7 @@ jpackage --type app-image --app-version 4.4 --copyright ""  --description "J(ava
     --mac-sign \
     --mac-app-category education
 
+zip -r JLS_macOS.zip JLS.app
 
 
 # jpackage --type dmg --app-version 4.4 --copyright ""  --description "J(ava) Logic Simulator" \

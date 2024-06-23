@@ -15,6 +15,8 @@ A digital logic simulator, written in Java.
 
 ## macOS
 
+Skip to step 3 if not updating the JRE. 
+
 1. Create certificates for Application install to login keychain. (https://developer.apple.com/help/account/create-certificates/create-developer-id-certificates/)
 2. Create a multi-platform version of jre (using notes from https://incenp.org/notes/2023/universal-java-app-on-macos.html)
 	1. Get latest tgz bundles from Adoptium: https://adoptium.net/temurin/releases/?os=mac and place in jre folder (OpenJDK*-jre_x64_mac_hotspot_*.tar.gz and  OpenJDK.+-jre_x64_mac_hotspot_(.+).tar.gz)
@@ -22,9 +24,7 @@ A digital logic simulator, written in Java.
 3. Update `remakeMacBundle.sh` with updates to files, directories, versions. 
    1. Update `app-version` 
    2. If jre has been updated, update `runtime-image` path
-   3. Remove any old app (`JLS.app` folder)
 4. Run `remakeMacBundle.sh`
-5. `zip -r JLS_mac.zip JLS.app`
 
 ## Windows
 
