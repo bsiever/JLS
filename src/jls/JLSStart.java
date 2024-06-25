@@ -1146,6 +1146,8 @@ public class JLSStart extends JFrame implements ChangeListener {
 			return;
 		}
 
+		retrieveEditHistory(filePath, circ);
+		
 		// delete checkpoint file if there is one
 		new File(cname + ".jls~").delete();
 
@@ -1300,6 +1302,22 @@ public class JLSStart extends JFrame implements ChangeListener {
 		}catch(Throwable e){
 			return null;
 		}
+	}
+	
+	
+	private static void retrieveEditHistory(String filePath, Circuit circuit) {
+		try{
+			ZipFile target = new ZipFile(new File(filePath));
+			Scanner scanner = testScanner(new Scanner(target.getInputStream(target.getEntry("JLSHistory"))));
+			List<String> history = circuit.getEditHistory();
+			while(scanner.hasNextLine()) {
+				history.add(scanner.nextLine());
+			}
+			scanner.close();
+		}catch(Throwable e){
+			return;
+		}
+		
 	}
 	
 	private static Scanner getScannerForFile(String filePath){
