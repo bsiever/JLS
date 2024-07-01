@@ -127,7 +127,7 @@ public final class Editor extends SimpleEditor {
 
 		// get name from user
 		String oldName = circuit.getDirectory() + "/" + circuit.getName() + ".jls~";
-		JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
+		JFileChooser chooser = new JFileChooser(JLSInfo.getLastSelectedDirectory());
 		javax.swing.filechooser.FileFilter filter =
 			new javax.swing.filechooser.FileFilter() {
 			public boolean accept(File f) {
@@ -185,10 +185,10 @@ public final class Editor extends SimpleEditor {
 		}
 		circuit.setName(name);
 		circuit.setDirectory(chooser.getCurrentDirectory().toString());
+		JLSInfo.setLastSelectedDirectory(chooser.getCurrentDirectory() + "/");
 
 		// save circuit
 		if (save()) {
-
 			// delete checkpoint file if there is one
 			new File(oldName).delete();
 		}

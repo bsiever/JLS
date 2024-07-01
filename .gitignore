@@ -8,3 +8,5 @@ bin*
 .class
 .DS_Store
 macOS/jre
+releases/JLS.jar
+releases/macOS/JLS_macOS.zip

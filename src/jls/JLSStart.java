@@ -1083,7 +1083,6 @@ public class JLSStart extends JFrame implements ChangeListener {
 		setupEditor(circ,name);
 	} // end of newCircuit method
 
-	private String prevOpenDir = "";  // the directory of the previous file opened
 
 	/**
 	 * Open an existing circuit.
@@ -1097,8 +1096,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 		// get circuit name from user if parameter is null
 		if (filePath == null) {
-			prevOpenDir = prevOpenDir.equals("") ? System.getProperty("user.home") : prevOpenDir;
-			JFileChooser chooser = new JFileChooser( prevOpenDir );
+			JFileChooser chooser = new JFileChooser( JLSInfo.getLastSelectedDirectory() );
 			
 			javax.swing.filechooser.FileFilter filter =
 				new javax.swing.filechooser.FileFilter() {
@@ -1118,10 +1116,12 @@ public class JLSStart extends JFrame implements ChangeListener {
 			filePath = file.getAbsolutePath();
 			if (filePath == null || filePath.equals(""))
 				return;
-			prevOpenDir = chooser.getCurrentDirectory().toString();
+			JLSInfo.setLastSelectedDirectory(chooser.getCurrentDirectory()+"/");
 		}else {
 			file = new File(filePath);
-			prevOpenDir = file.getParent().equals("") ? System.getProperty("user.home") : file.getParent();
+			if(file.getParent().equals("") == false) {
+				JLSInfo.setLastSelectedDirectory(file.getParent());
+			}
 		}
 		
 		Scanner input = getScannerForFile(filePath);
@@ -1358,7 +1358,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
+		JFileChooser chooser = new JFileChooser(JLSInfo.getLastSelectedDirectory());
 		javax.swing.filechooser.FileFilter filter =
 			new javax.swing.filechooser.FileFilter() {
 			public boolean accept(File f) {
@@ -1388,6 +1388,8 @@ public class JLSStart extends JFrame implements ChangeListener {
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+		String path = chooser.getCurrentDirectory() + "/";
+		JLSInfo.setLastSelectedDirectory(path);
 		circ.finishLoad(null);
 
 		ed.finishImport(circ);
@@ -1783,7 +1785,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 			return;
 
 		// get name from user
-		JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
+		JFileChooser chooser = new JFileChooser(JLSInfo.getLastSelectedDirectory());
 		javax.swing.filechooser.FileFilter filter =
 			new javax.swing.filechooser.FileFilter() {
 			public boolean accept(File f) {
@@ -1807,8 +1809,9 @@ public class JLSStart extends JFrame implements ChangeListener {
 		if (!fileName.endsWith(".jpg")) {
 			fileName = fileName + ".jpg";
 		}
-		fileName = chooser.getCurrentDirectory() + "/" + fileName;
-
+		String path = chooser.getCurrentDirectory() + "/";
+		fileName = path + fileName;
+		JLSInfo.setLastSelectedDirectory(path);
 		// export the image
 		Circuit circ = ed.getCircuit();
 		circ.exportImage(fileName);
