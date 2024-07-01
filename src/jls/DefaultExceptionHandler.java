@@ -86,7 +86,7 @@ public final class DefaultExceptionHandler implements Thread.UncaughtExceptionHa
 				saveTrace(th);
 				System.out.println("UNEXPECTED INTERNAL ERROR!");
 				System.out.println("JLS will create a file called JLSerror in the current folder/directory.");
-				System.out.println("Please email it to pop@mtu.edu to report the error so it can be fixed.");
+				System.out.println("Please email it to bsiever+jls@gmail.com to report the error so it can be fixed.");
 				System.exit(1);
 			}
 			
@@ -97,7 +97,7 @@ public final class DefaultExceptionHandler implements Thread.UncaughtExceptionHa
 					"UNEXPECTED INTERNAL ERROR! Try to save circuit(s)." + 
 					"<p>" + 
 					"JLS will create a file called JLSerror in the current folder/directory." +
-					"<br>Please email it to pop@mtu.edu to report the error so it can be fixed." +
+					"<br>Please email it to bsiever+jls@gmail.com  to report the error so it can be fixed." +
 					"<br><br>Try restarting JLS using checkpoints of open circuits" +
 					"<br>(i.e., <i>file</i>.jls~, where <i>file</i> is the name of the open circuit)" +
 					"</html>";
@@ -117,7 +117,7 @@ public final class DefaultExceptionHandler implements Thread.UncaughtExceptionHa
 		//th.printStackTrace(); // remove this when not debugging
 		try {
 			PrintWriter out = new PrintWriter("JLSerror");
-			out.println("Please email this file to pop@mtu.edu");
+			out.println("Please email this file to bsiever+jls@gmail.com ");
 			out.println("along with a short description of what");
 			out.println("you were doing when the error occured.");
 			out.println("Thanks.");
