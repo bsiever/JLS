@@ -7,7 +7,7 @@ rm contents/JLS.jar
 cp ../JLS.jar contents
 
 
-jpackage --type app-image --app-version 4.6 --copyright ""  --description "J(ava) Logic Simulator" \
+jpackage --type app-image --app-version 4.8 --copyright ""  --description "J(ava) Logic Simulator" \
     --name "JLS" \
     --icon  resources/JLS.ico  \
     --runtime-image ./jre/jdk-21.0.3+9-jre/ \

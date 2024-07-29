@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -66,6 +67,15 @@ public class Circuit implements Printable {
 																				// file
 	private static int lineNumber; // to report errors when reading circuit file
 
+	private List<String> editHistory = new LinkedList<String>();
+	
+	
+	/**
+	 * Try to open the file and retrieve the edit history.
+	 */
+	public List<String> getEditHistory() {
+		return editHistory;
+	}
 	/**
 	 * Create a new, empty circuit.
 	 * 

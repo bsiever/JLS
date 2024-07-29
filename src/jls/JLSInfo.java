@@ -6,8 +6,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.jar.JarFile;
+import java.util.prefs.Preferences;
 import java.util.zip.ZipEntry;
 
 import javax.help.*;
@@ -22,12 +25,14 @@ public final class JLSInfo {
 	// version info
 	public static final String build = "<p>"+getClassBuildTime();
 	public static final int vers = 4;
-	public static final int release = 6;
+	public static final int release = 8;
 	public static final int buildNum = 0;
 	public static final int year = 2024;
 	public static final String authors = "David A. Poplawski (primary/original author);\n Joshua Marshall (contributor);\n Other MTU.EDU students,\n and Bill Siever (minor modifications and packaging)";
 	public static final String repository = "https://github.com/bsiever/JLS";
 	public static final String version = "JLS " + vers + "." + release;
+	public static final String LAST_WD_KEY = "last directory";  // Working directory of last file browser operation. 
+
 	
 	// miscellaneous parameters
 	public static final int windowsize = 600;
@@ -67,6 +72,43 @@ public final class JLSInfo {
 	 * Private constructor to keep this class from being instantiated.
 	 */
 	private JLSInfo() {}
+
+	
+	/**
+	 * Returns the last selected/saved directory (with the trailing /)
+	 * @return
+	 */
+	public static String getLastSelectedDirectory() {
+		Preferences prefs = Preferences.userNodeForPackage(JLSInfo.class);
+		String dir = prefs.get(JLSInfo.LAST_WD_KEY, "");
+		// If it doesn't seem valid, use the home directory
+		if(dir.equals("/") || dir.equals("") || (Files.exists(Paths.get(dir)) == false)) {
+			dir = System.getProperty("user.home");
+		} 	
+		return dir;
+	}
+	
+	/**
+	 * 
+	 * @param dir Directory to save/store
+	 */
+	public static void setLastSelectedDirectory(String dir) {
+		// Use home as default
+		String toStore = System.getProperty("user.home");
+		
+		// Check if passed value seems valid 
+		if(dir!=null && dir.length()!=0) {
+			if(dir.charAt(dir.length()-1)!='/')
+				dir = dir+"/";
+			if(Files.exists(Paths.get(dir))) {
+				toStore = dir;
+			}
+		}
+		// Save/store the given directory
+		Preferences prefs = Preferences.userNodeForPackage(JLSInfo.class);
+		prefs.put(JLSInfo.LAST_WD_KEY, toStore);
+			
+	}
 	
 	
 	// https://stackoverflow.com/questions/3336392/java-print-time-of-last-compilation

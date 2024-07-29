@@ -3,7 +3,10 @@ package jls.edit;
 import java.awt.Component;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.Instant;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -72,15 +75,43 @@ public final class Editor extends SimpleEditor {
 
 		// save the circuit
 		circuit.save(output);
-		output.close();
-
-		// delete checkpoint file if there is one
+		try {
+			output.flush();
+			out.closeEntry();
+			saveEditHistory(out, output);
+			output.close();
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(getTopLevelAncestor(),
+					"Can't write to " + fileName, "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+				// delete checkpoint file if there is one
 		new File(fileName + "~").delete();
 
 		return true;
 
 	} // end of save method
 
+	
+	private void saveEditHistory(ZipOutputStream out, PrintWriter output) throws IOException {
+		// Create new entry
+		Instant timeStamp = Instant.now();
+		UUID uuid = UUID.randomUUID();
+		String stamp = timeStamp + " " + uuid;
+		// Append to history
+		circuit.getEditHistory().add(stamp);
+		
+		// Add new entry
+		out.putNextEntry(new ZipEntry("JLSHistory"));
+		// Add all old entries
+		for(String s: circuit.getEditHistory()) {
+			output.println(s);
+		}		
+		// Close the file
+		output.close();	
+	}
+	
 	/**
 	 * Give new name to circuit, then save it.
 	 */
@@ -96,7 +127,7 @@ public final class Editor extends SimpleEditor {
 
 		// get name from user
 		String oldName = circuit.getDirectory() + "/" + circuit.getName() + ".jls~";
-		JFileChooser chooser = new JFileChooser(System.getProperty("user.home"));
+		JFileChooser chooser = new JFileChooser(JLSInfo.getLastSelectedDirectory());
 		javax.swing.filechooser.FileFilter filter =
 			new javax.swing.filechooser.FileFilter() {
 			public boolean accept(File f) {
@@ -154,10 +185,10 @@ public final class Editor extends SimpleEditor {
 		}
 		circuit.setName(name);
 		circuit.setDirectory(chooser.getCurrentDirectory().toString());
+		JLSInfo.setLastSelectedDirectory(chooser.getCurrentDirectory() + "/");
 
 		// save circuit
 		if (save()) {
-
 			// delete checkpoint file if there is one
 			new File(oldName).delete();
 		}

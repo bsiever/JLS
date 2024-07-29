@@ -401,7 +401,10 @@ public class JumpEnd extends LogicElement {
 			heading.setAlignmentX((float)0.5);
 			window.add(heading);
 
-			starts = new JList<String>((String[]) circuit.getJumpStartNames().toArray());
+			Set<String> startNames = circuit.getJumpStartNames();
+			
+			String[] startsAsString = startNames.toArray(new String[startNames.size()]);
+			starts = new JList<String>(startsAsString);
 			starts.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			starts.setVisibleRowCount(Math.min(circuit.getJumpStartNames().size(),10));
 			JScrollPane pane = new JScrollPane(starts);
