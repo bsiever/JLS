@@ -50,6 +50,7 @@ import javax.swing.SwingConstants;
 
 import jls.Circuit;
 import jls.JLSInfo;
+import jls.TellUser;
 import jls.Util;
 import jls.elem.Adder;
 import jls.elem.AndGate;
@@ -918,6 +919,11 @@ public abstract class SimpleEditor extends JPanel {
 				text = image == null ? "END" : "";
 				act = new AbstractAction(text,image) {
 					public void actionPerformed(ActionEvent event) {
+						Set<String> startNames = circuit.getJumpStartNames();
+						if(startNames.size() == 0) {
+							TellUser.err("No named wires exist ", true);
+							return;
+						}
 						setup(new JumpEnd(circuit),event.getSource() instanceof JButton);
 					}
 				};
