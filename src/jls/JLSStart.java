@@ -1289,7 +1289,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 		try{
 			ZipFile target = new ZipFile(new File(filePath));
 			Scanner toReturn = testScanner(new Scanner(target.getInputStream(target.getEntry("JLSCircuit"))));
-			target.close();
+//			target.close();
 			return toReturn;
 		}catch(Throwable e){
 			return null;
@@ -1328,7 +1328,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 		name = name.replaceAll("\\.jls$", "");
 
 		if (Util.isValidFileName(name) == null) {
-			TellUser.err(name + " is not a valid circuit file name.\n"
+			TellUser.err(name + " is not a valid circuit file name.\n" 
 					+ "It must start with a letter and contain letters, "
 					+"digits and underscores.", true);
 			return null;

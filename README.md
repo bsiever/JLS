@@ -29,7 +29,7 @@ Skip to step 3 if not updating the JRE.
 ## Windows
 
 Login to windows, Academic lab;  Open bash and navigate to H:\git\JLS; `git pull`
-Skip to step 3 if not updating the JRE.
+Skip to step 2 if not updating the JRE.
 
 1. Get the jre (https://adoptium.net/temurin/releases/), put it in `jre`, and unzip it.  
 2. Copy the JLS jar to the contents folder (`cd releases/windows`, `cp ../JLS.jar contents`)

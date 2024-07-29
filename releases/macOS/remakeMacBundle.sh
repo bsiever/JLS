@@ -2,7 +2,7 @@
 
 rm -Rf JLS.app JLS_macOS.zip
 
-jpackage --type app-image --app-version 4.7 --copyright ""  --description "J(ava) Logic Simulator" \
+jpackage --type app-image --app-version 4.9 --copyright ""  --description "J(ava) Logic Simulator" \
     --name "JLS" \
     --icon  resources/JLS.icns  \
     --resource-dir resources \

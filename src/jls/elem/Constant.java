@@ -611,7 +611,6 @@ public class Constant extends LogicElement implements ActionListener {
 				valueField.setText(value.toString(base));
 				valuePad.setBase(base);
 				valuePad.reset();
-				System.out.println(orientation);
 				if (orientation == JLSInfo.Orientation.LEFT)
 					left.setSelected(true);
 				else if (orientation == JLSInfo.Orientation.RIGHT)

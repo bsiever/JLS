@@ -246,7 +246,7 @@ public class Circuit implements Printable {
 				name = input.next();
 			else
 				input.next();
-
+			
 			// read circuit and get basic info for each element
 			lineNumber += 1;
 			while (input.hasNext()) {
