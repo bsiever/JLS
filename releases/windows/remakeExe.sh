@@ -15,6 +15,8 @@ jpackage --type app-image --app-version 4.9 --copyright ""  --description "J(ava
     --main-jar JLS.jar \
     --main-class jls.JLS \
 
-powershell Compress-Archive JLS JLS_windows.zip
+echo "Use file browser's Compress (Right-Click on JLS folder, Sent To > Compress", then rename file to JLS_windows.zip"
+
+# powershell Compress-Archive JLS JLS_windows.zip
 #tar -cvf JLS_windows.zip JLS
 
