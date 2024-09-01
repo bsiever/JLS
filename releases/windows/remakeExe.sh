@@ -15,5 +15,6 @@ jpackage --type app-image --app-version 4.9 --copyright ""  --description "J(ava
     --main-jar JLS.jar \
     --main-class jls.JLS \
 
-tar -cvf JLS_windows.zip JLS
+powershell Compress-Archive JLS JLS_windows.zip
+#tar -cvf JLS_windows.zip JLS
 
