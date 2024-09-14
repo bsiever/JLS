@@ -50,6 +50,29 @@ Add .jar and _macOS.zip and .zip from windows to the release.
 Got to GitHub repo @ https://github.com/bsiever/JLS/releases and Draft a new release.
 Attach executables.  Need to upload windows (maybe via google drive transfer.  Ugh)
 
+# Command Line Arguments
+
+* `-h`: Help
+* `-b`: Batch mode
+* `-sNAME` Startup parameter file.  Consists of 
+   ```
+   TYPE partTypeName (jls.elem.*)
+   PROPDELAY integer
+   
+   ELEMENT elementNameInCircuit
+   WATCHED true/false or PROPDELAY integer or INITIALLY value or FILENAME datafile
+    
+   CLEAR WATCHES or CLEAR PROBES
+   
+   RESET PROPDELAYS 
+   ```
+* `-tNAME` Test input file (Signal Generator)
+* `-d TIME` Simulation time limit
+* `-p printer` Print circuit
+* `-r printer` Print signals
+* `-i` Image export.  Saves to .jpg with same name as file.
+* `-v printer` Print top circuit.
+
 # Misc. notes & debris
 
 * Resources for converting svgs to icons (macOS icons)
