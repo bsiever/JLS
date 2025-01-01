@@ -6,7 +6,7 @@ A digital logic simulator, written in Java.
 
 ## Common
 
-1. Update `src/jls/JLSInfo.java`'s `ver`, `release`, and `buildNum`
+1. Update `src/jls/JLSInfo.java`'s `ver`, `release`, `buildNum`, and `year`
 2. Rebuild and export to Jar (File > Export;  Java > Runnable JAR)
 	1. Launch Config `JLS - JLS`
 	2. Place it in JLS/releases/JLS.jar

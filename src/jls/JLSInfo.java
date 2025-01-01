@@ -27,7 +27,7 @@ public final class JLSInfo {
 	public static final int vers = 4;
 	public static final int release = 10;
 	public static final int buildNum = 0;
-	public static final int year = 2024;
+	public static final int year = 2025;
 	public static final String authors = "David A. Poplawski (primary/original author);\n Joshua Marshall (contributor);\n Other MTU.EDU students,\n and Bill Siever (minor modifications and packaging)";
 	public static final String repository = "https://github.com/bsiever/JLS";
 	public static final String version = "JLS " + vers + "." + release;
