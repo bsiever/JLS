@@ -28,14 +28,14 @@ Skip to step 3 if not updating the JRE.
 
 ## Windows
 
-Login to windows, Academic lab;  Open bash and navigate to H:\git\JLS; `git pull`
+Login to windows, Academic lab;  Open bash and navigate to H:\git\JLS; `git pull` (or `git pull origin master`)
 Skip to step 2 if not updating the JRE.
 
 1. Get the jre (https://adoptium.net/temurin/releases/), put it in `jre`, and unzip it.  
 2. Copy the JLS jar to the contents folder (`cd releases/windows`, `cp ../JLS.jar contents`)
 3. Update the `remakeExe.sh` script with version number and any changes to jre directory/name. 
 4. Remove old version (remove the JLS director in releases/windows)
-5. Run `remakeExe.sh` 
+5. Run `remakeExe.sh`  (`bash remakeExe.sh`)
 
 ## GitHub 
 
@@ -47,7 +47,7 @@ Add .jar and _macOS.zip and .zip from windows to the release.
 
 `git tag -a v4.6.0 -m "Version 4.6 Release"`
 `git push origin tag v4.6.0`
-Got to GitHub repo @ https://github.com/bsiever/JLS/releases and Draft a new release.
+Go to GitHub repo @ https://github.com/bsiever/JLS/releases and Draft a new release.
 Attach executables.  Need to upload windows (maybe via google drive transfer.  Ugh)
 
 # Command Line Arguments
