@@ -3285,7 +3285,6 @@ public abstract class SimpleEditor extends JPanel {
 					 * @return false if can't be done, true if done.
 					 */
 					private boolean paste(Circuit from) {
-
 						// check for naming conflicts
 						for (Element el : from.getElements()) {
 							if (el instanceof JumpEnd)

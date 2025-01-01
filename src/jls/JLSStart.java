@@ -55,6 +55,7 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.JTextComponent;
 
 import jls.edit.Editor;
 import jls.elem.Element;
@@ -548,13 +549,16 @@ public class JLSStart extends JFrame implements ChangeListener {
     	                	case KeyEvent.VK_V: // Paste
     	                	case KeyEvent.VK_X: // Cut
         	                	if ((kev.getModifiersEx() & KeyEvent.META_DOWN_MASK) != 0 && !((kev.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0)) {
-        	                        kev.consume(); // Drop the original event, this is really optional.
-        	                        KeyEvent fake = new KeyEvent(kev.getComponent(),
-        	                                kev.getID(),
-        	                                kev.getWhen(),
-        	                                (kev.getModifiersEx() & ~KeyEvent.META_DOWN_MASK) | KeyEvent.CTRL_DOWN_MASK,
-        	                                kev.getKeyCode(), kev.getKeyChar());
-        	                        java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(fake);
+        	                		// Only translate Command to Control for text controls
+        	                		if(event.getSource() instanceof JTextComponent) {
+	        	                        kev.consume(); // Drop the original event, this is really optional.
+	        	                        KeyEvent fake = new KeyEvent(kev.getComponent(),
+	        	                                kev.getID(),
+	        	                                kev.getWhen(),
+	        	                                (kev.getModifiersEx() & ~KeyEvent.META_DOWN_MASK) | KeyEvent.CTRL_DOWN_MASK,
+	        	                                kev.getKeyCode(), kev.getKeyChar());
+	        	                        java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(fake);
+        	                		}
         	                    }
     	                		break;
     	                	}
