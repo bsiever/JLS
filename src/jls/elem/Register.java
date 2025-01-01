@@ -23,7 +23,7 @@ public class Register extends LogicElement {
 	
 	// default values
 	private static final String defaultName = "";
-	private static final Register.Type defaultType = Type.Latch;
+	private static final Register.Type defaultType = Type.PosFF;
 	private static final int defaultBits = 1;
 	private static final BigInteger defaultInitValue = BigInteger.ZERO;
 	private static final int defaultBase = 10;

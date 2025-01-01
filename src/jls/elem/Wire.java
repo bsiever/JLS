@@ -465,7 +465,13 @@ public class Wire extends Element {
 	 * @return the value.
 	 */
 	public BitSet getValue() {
-		
+//		// BSIEVER: To review
+//		if(net == null) {
+//			System.out.println("Error!!! Bad net!");
+//			System.out.println("End1: " + end1);
+//			System.out.println("End2: " + end2);
+//			net = new WireNet();
+//		}
 		return net.getValue();
 	} // end of getValue method
 

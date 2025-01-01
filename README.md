@@ -66,7 +66,7 @@ Attach executables.  Need to upload windows (maybe via google drive transfer.  U
    
    RESET PROPDELAYS 
    ```
-* `-tNAME` Test input file (Signal Generator)
+* `-t NAME` Test input file (Signal Generator)
 * `-d TIME` Simulation time limit
 * `-p printer` Print circuit
 * `-r printer` Print signals
