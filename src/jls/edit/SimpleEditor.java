@@ -2839,6 +2839,8 @@ public abstract class SimpleEditor extends JPanel {
 			}*/
 
 
+						untouchAll(); // may have moved and stopped touching
+
 						// Set is O(n log(n)) to traverse over and doesn't benefit from cache locality.
 						// we're doing a lot of iterating over the same collection here,
 						// so it makes sense to use a temporary array for cache locality and O(n) traversal.
