@@ -2842,8 +2842,8 @@ public abstract class SimpleEditor extends JPanel {
 						// Set is O(n log(n)) to traverse over and doesn't benefit from cache locality.
 						// we're doing a lot of iterating over the same collection here,
 						// so it makes sense to use a temporary array for cache locality and O(n) traversal.
-						Element[] selectedArr = selected.toArray(Element[]::new);
-						ArrayList<Element> elementsArr = new ArrayList(circuit.getElements());
+						Element[] selectedArr = selected.toArray(new Element[selected.size()]);
+						ArrayList<Element> elementsArr = new ArrayList<Element>(circuit.getElements());
 						// elementsArr.removeAll(selected);
 						{
 							int i = 0;
