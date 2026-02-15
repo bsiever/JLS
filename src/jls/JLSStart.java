@@ -1821,7 +1821,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 		chooser.addChoosableFileFilter(jpgFilter);
 		chooser.addChoosableFileFilter(pngFilter);
 		chooser.setFileFilter(filter);
-		if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
+		if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) 
 			return;
 		String fileName = chooser.getSelectedFile().getName().trim();
 		javax.swing.filechooser.FileFilter selectedFilter = chooser.getFileFilter();
