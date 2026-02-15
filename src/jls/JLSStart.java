@@ -89,7 +89,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Parse command line arguments and start up JLS.
-	 *
+	 * 
 	 * @param args Command line arguments.
 	 */
 	public static void start(String[] args, DefaultExceptionHandler exh) {
@@ -131,7 +131,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 				System.out.println(startFile + " is not a valid circuit file name");
 				System.exit(1);
 			}
-
+			
 			Scanner input = getScannerForFile(startFile);
 
 			// create new circuit
@@ -191,7 +191,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 				batchSim.printTrace(printer);
 			}
 		}
-
+		
 		else if (JLSInfo.imgexport) {
 			// from Zack, for MAC's?
 			System.setProperty("java.awt.headless", "true");
@@ -297,7 +297,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 	/**
 	 * Display values of watched elements to stdout.
 	 * Descends into subcircuits recursively.
-	 *
+	 * 
 	 * @param circ The circuit to find watched elements in.
 	 * @param qual Qualified name of subcircuit.
 	 */
@@ -336,7 +336,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Parse command line.
-	 *
+	 * 
 	 * @param args The command line arguments.
 	 */
 	public static void parseCommandLine(String [] args) {
@@ -359,10 +359,10 @@ public class JLSStart extends JFrame implements ChangeListener {
 						JLSInfo.batch = true;
 					}
 				}
-
+				
 				else if (flag == 'i') {
 					JLSInfo.imgexport = true;
-				}
+				}				
 
 				else if (flag == 'r') {
 					if (arg.length() > 2) {
@@ -515,13 +515,13 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 		// make it look the same everywhere (especially MAC's).
 		try {
-
-	        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-
+			
+	        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());	
+	        
 	        // If on Mac, swap meta to have copy/paste/cut work
             String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
             if(OS.indexOf("mac") >=0 || OS.indexOf("darwin")>=0 || OS.indexOf("os x") >=0) {
-            	// Setup file open
+            	// Setup file open 
             	Desktop a = Desktop.getDesktop();
                 a.setOpenFileHandler(new OpenFilesHandler() {
 
@@ -533,14 +533,14 @@ public class JLSStart extends JFrame implements ChangeListener {
                 			open(fileName);
     					}
     				}
-
-                });
-
+                	
+                }); 
+            	
             	// Set up copy/paste/cut
-            	// https://stackoverflow.com/questions/1852433/use-default-keymap-of-native-os
+            	// https://stackoverflow.com/questions/1852433/use-default-keymap-of-native-os 
     	        java.awt.Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
 
-    	        	// Check for Command-C, Command-V, and Command-X on Mac and re-map them to control.
+    	        	// Check for Command-C, Command-V, and Command-X on Mac and re-map them to control. 
     	            public void eventDispatched(AWTEvent event) {
     	                KeyEvent kev = (KeyEvent) event;
     	                if (kev.getID() == KeyEvent.KEY_PRESSED) {
@@ -564,8 +564,8 @@ public class JLSStart extends JFrame implements ChangeListener {
     	                	}
     	                }
     	            }
-    	        }, KeyEvent.KEY_EVENT_MASK);
-            }
+    	        }, KeyEvent.KEY_EVENT_MASK);            	
+            }            
 		}
 		catch (Exception ex) {
 
@@ -640,7 +640,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 	 * root of the subcircuit containment.
 	 * If no tab is selected (i.e., all editors have been closed),
 	 * then the simulator's circuit is set to null.
-	 *
+	 * 
 	 * @param event Unused.
 	 */
 	public void stateChanged(ChangeEvent event) {
@@ -683,7 +683,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Get currently visible editor.
-	 *
+	 * 
 	 * @return the currently visible editor, or null if no editor is visible.
 	 */
 	public Editor getVisibleEditor() {
@@ -693,7 +693,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Set up file menu.
-	 *
+	 * 
 	 * @return the file menu created.
 	 */
 	public JMenu fileMenu() {
@@ -819,7 +819,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Set up simulator menu.
-	 *
+	 * 
 	 * @return the menu.
 	 */
 	public JMenu simMenu() {
@@ -876,7 +876,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Set up global change menu.
-	 *
+	 * 
 	 * @return the menu.
 	 */
 	public JMenu globalMenu() {
@@ -964,7 +964,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Create help menu.
-	 *
+	 * 
 	 * @return the menu.
 	 */
 	public JMenu helpMenu() {
@@ -985,7 +985,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 		help.add(tutorial);
 		JMenuItem tutorial1 = new JMenuItem("Introduction");
 		String tip1 = "<html>This tutorial demonstrates the " +
-		"basic drawing capabilities<br>" +
+		"basic drawing capabilities<br>" + 
 		"using simple gates and wires, " +
 		"and how to use the simulator&nbsp;&nbsp;<br>" +
 		"to watch the circuit in action.</html>";
@@ -997,7 +997,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 			}
 		});
 		JMenuItem tutorial2 = new JMenuItem("4-Bit Counter");
-		String tip2 = "<html>Demonstrates the use of more complex&nbsp;&nbsp;<br>" +
+		String tip2 = "<html>Demonstrates the use of more complex&nbsp;&nbsp;<br>" + 
 		"elements and multi-wire connections.</html>";
 		tutorial2.setToolTipText(tip2);
 		tutorial.add(tutorial2);
@@ -1090,7 +1090,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Open an existing circuit.
-	 *
+	 * 
 	 * @param name The name of the circuit.  If null, then prompt user for
 	 * the name.
 	 */
@@ -1101,7 +1101,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 		// get circuit name from user if parameter is null
 		if (filePath == null) {
 			JFileChooser chooser = new JFileChooser( JLSInfo.getLastSelectedDirectory() );
-
+			
 			javax.swing.filechooser.FileFilter filter =
 				new javax.swing.filechooser.FileFilter() {
 				public boolean accept(File f) {
@@ -1112,9 +1112,9 @@ public class JLSStart extends JFrame implements ChangeListener {
 					return "JLS Circuit Files";
 				}
 			};
-
+			
 			chooser.setFileFilter(filter);
-			if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
+			if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) 
 				return;
 			file = chooser.getSelectedFile();
 			filePath = file.getAbsolutePath();
@@ -1127,7 +1127,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 				JLSInfo.setLastSelectedDirectory(file.getParent());
 			}
 		}
-
+		
 		Scanner input = getScannerForFile(filePath);
 
 		String cname;
@@ -1151,7 +1151,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 		}
 
 		retrieveEditHistory(filePath, circ);
-
+		
 		// delete checkpoint file if there is one
 		new File(cname + ".jls~").delete();
 
@@ -1162,7 +1162,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Set up editor window
-	 *
+	 * 
 	 * @param circ The circuit the editor will edit.
 	 * @param name The name of the circuit.
 	 */
@@ -1222,7 +1222,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Print circuit currently being edited, plus any state machines.
-	 *
+	 * 
 	 * @param all True to print the entire circuit, false to print just what's visible.
 	 */
 	public void print(boolean all) {
@@ -1262,9 +1262,9 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Check for duplicate of circuit already being edited.
-	 *
+	 * 
 	 * @param name The new name.
-	 *
+	 * 
 	 * @return true if a duplicate, false if not.
 	 */
 	public boolean duplicateName(String name) {
@@ -1280,7 +1280,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 		return false;
 	} // end of duplicateName method
 
-
+	
 	private static Scanner testScanner(Scanner toTest){
 		if (toTest.hasNext() == false) {
 			toTest.close();
@@ -1288,7 +1288,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 		}
 		return toTest;
 	}
-
+	
 	private static Scanner getZipScanner(String filePath){
 		try{
 			ZipFile target = new ZipFile(new File(filePath));
@@ -1299,7 +1299,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 			return null;
 		}
 	}
-
+	
 	private static Scanner getTextScanner(String filePath){
 		try{
 			return testScanner(new Scanner(new File(filePath)));
@@ -1307,8 +1307,8 @@ public class JLSStart extends JFrame implements ChangeListener {
 			return null;
 		}
 	}
-
-
+	
+	
 	private static void retrieveEditHistory(String filePath, Circuit circuit) {
 		try{
 			ZipFile target = new ZipFile(new File(filePath));
@@ -1321,37 +1321,37 @@ public class JLSStart extends JFrame implements ChangeListener {
 		}catch(Throwable e){
 			return;
 		}
-
+		
 	}
-
+	
 	private static Scanner getScannerForFile(String filePath){
-
+		
 		String name;
-
+		
 		name = filePath.replaceAll("\\.jls~$", "");
 		name = name.replaceAll("\\.jls$", "");
 
 		if (Util.isValidFileName(name) == null) {
-			TellUser.err(name + " is not a valid circuit file name.\n"
+			TellUser.err(name + " is not a valid circuit file name.\n" 
 					+ "It must start with a letter and contain letters, "
 					+"digits and underscores.", true);
 			return null;
 		}
-
+		
 		Scanner toReturn = null;
-
+				
 		if((toReturn = getZipScanner(filePath)) != null) return toReturn;
-
+					
 		if((toReturn = getTextScanner(filePath)) != null) return toReturn;
-
+					
 		TellUser.err("Unable to open " + name + "\n", true);
 		return null;
 	}
-
-
+	
+	
 	/**
 	 * Import a circuit from a file into this circuit.
-	 * @throws Exception
+	 * @throws Exception 
 	 */
 	public void fileImport() throws Exception {
 
@@ -1373,9 +1373,9 @@ public class JLSStart extends JFrame implements ChangeListener {
 			}
 		};
 		chooser.setFileFilter(filter);
-		if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION)
+		if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) 
 			return;
-
+		
 		Scanner input = getScannerForFile(chooser.getSelectedFile().getAbsolutePath());
 
 		// create new circuit
@@ -1401,7 +1401,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Check for parameter file in the current directory,
-	 *
+	 * 
 	 * @param paramFile The name of the file containing JLS parameters.
 	 * @param circuit The circuit to apply the parameters too.
 	 */
@@ -1694,7 +1694,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 	/**
 	 * Set the propagation delay of all elements of a certain type
 	 * in a circuit and its subcircuits.
-	 *
+	 * 
 	 * @param circ The circuit.
 	 * @param cl The type (class) of element to change.
 	 * @param delay The new propagation delay.
@@ -1716,7 +1716,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Print the circuit specified in the start file.
-	 *
+	 * 
 	 * @param justTop True if just the top level of the circuit is to be printed, false if the whole thing.
 	 */
 	private static void printCirc(boolean justTop) {
@@ -1725,7 +1725,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 		// create new circuit
 		Circuit circ = new Circuit(name);
-
+		
 		try {
 			circ.finishLoad(null);
 		} catch (Exception e) {
@@ -1780,7 +1780,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Write an image of the circuit to a file.
-	 * @throws Exception
+	 * @throws Exception 
 	 */
 	public void exportImage() throws Exception {
 
@@ -1845,9 +1845,9 @@ public class JLSStart extends JFrame implements ChangeListener {
 
 	/**
 	 * Break compound name (a.b.c) into components.
-	 *
+	 * 
 	 * @param name The compound name.
-	 *
+	 * 
 	 * @return the components of the name, or null if the name is not valid.
 	 */
 	public static Vector<String> parseName(String name) {
