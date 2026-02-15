@@ -42,7 +42,7 @@ import jls.elem.WireNet;
 
 /**
  * The main (container) class for each circuit.
- * 
+ *
  * @author David A. Poplawski
  */
 public class Circuit implements Printable {
@@ -68,8 +68,8 @@ public class Circuit implements Printable {
 	private static int lineNumber; // to report errors when reading circuit file
 
 	private List<String> editHistory = new LinkedList<String>();
-	
-	
+
+
 	/**
 	 * Try to open the file and retrieve the edit history.
 	 */
@@ -78,7 +78,7 @@ public class Circuit implements Printable {
 	}
 	/**
 	 * Create a new, empty circuit.
-	 * 
+	 *
 	 * @param name
 	 *            The name of this circuit.
 	 */
@@ -89,7 +89,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Get the directory the circuit file is stored in.
-	 * 
+	 *
 	 * @return the full path name of the directory.
 	 */
 	public String getDirectory() {
@@ -99,7 +99,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Set the directory the circuit file is store in.
-	 * 
+	 *
 	 * @param dir
 	 *            The full path name of the directory.
 	 */
@@ -110,7 +110,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Get the name of this circuit.
-	 * 
+	 *
 	 * @return the name of this circuit.
 	 */
 	public String getName() {
@@ -120,7 +120,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Change name of this circuit.
-	 * 
+	 *
 	 * @param name
 	 *            New name.
 	 */
@@ -131,7 +131,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Check if circuit has changed.
-	 * 
+	 *
 	 * @return true if the circuit has changed, false if not.
 	 */
 	public boolean hasChanged() {
@@ -166,7 +166,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Add an element to this circuit.
-	 * 
+	 *
 	 * @param el
 	 *            The element to add.
 	 */
@@ -179,7 +179,7 @@ public class Circuit implements Printable {
 	/**
 	 * Delete element from circuit. Do nothing if the element is not in the
 	 * circuit.
-	 * 
+	 *
 	 * @param el
 	 *            The element to remove.
 	 */
@@ -198,10 +198,10 @@ public class Circuit implements Printable {
 
 	/**
 	 * Load circuit from file.
-	 * 
+	 *
 	 * @param scanner
 	 *            A scanner to read with.
-	 * 
+	 *
 	 * @return false if there were problems, true if load was successful.
 	 */
 	public boolean load(Scanner input) {
@@ -212,13 +212,13 @@ public class Circuit implements Printable {
 
 	/**
 	 * Load circuit from file.
-	 * 
+	 *
 	 * @param scanner
 	 *            A scanner to read with.
 	 * @param ln
 	 *            Unused, except to give a different signature for the recursive
 	 *            call that doesn't reset the line number counter.
-	 * 
+	 *
 	 * @return false if there were problems, true if load was successful.
 	 */
 	private boolean load(Scanner input, int ln) {
@@ -246,7 +246,7 @@ public class Circuit implements Printable {
 				name = input.next();
 			else
 				input.next();
-			
+
 			// read circuit and get basic info for each element
 			lineNumber += 1;
 			while (input.hasNext()) {
@@ -323,10 +323,10 @@ public class Circuit implements Printable {
 
 	/**
 	 * Load an element by reading all of its instance variable values.
-	 * 
+	 *
 	 * @param instance
 	 *            An empty object to load.
-	 * 
+	 *
 	 * @return false if the file is not in the right format, true if it is.
 	 */
 	public boolean loadElement(Element el, Scanner input) {
@@ -483,10 +483,10 @@ public class Circuit implements Printable {
 
 	/**
 	 * Finish load of circuit.
-	 * 
+	 *
 	 * @param g
 	 *            The Graphics object to use.
-	 * 
+	 *
 	 * @return false if any exceptions occur
 	 * @throws Exception
 	 */
@@ -570,7 +570,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Get the smallest rectangle containing all the elements in the circuit.
-	 * 
+	 *
 	 * @return the smallest rectangle.
 	 */
 	public Rectangle getBounds() {
@@ -592,7 +592,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Save circuit in file.
-	 * 
+	 *
 	 * @param output
 	 *            The file to write to.
 	 */
@@ -628,8 +628,8 @@ public class Circuit implements Printable {
 	 * Draw the circuit by drawing every element. First the set of elements not
 	 * in the second set are drawn, then the ones in the second set are drawn.
 	 * Wires are drawn first in each set.
-	 * 
-	 * 
+	 *
+	 *
 	 * @param g
 	 *            The graphics object to draw with.
 	 * @param second
@@ -637,7 +637,7 @@ public class Circuit implements Printable {
 	 * @param ed
 	 *            The editor window doing the drawing.
 	 * @throws Exception
-	 * 
+	 *
 	 * @param g
 	 *            The graphics object to draw with.
 	 * @param second
@@ -688,14 +688,14 @@ public class Circuit implements Printable {
 
 	/**
 	 * Print the circuit.
-	 * 
+	 *
 	 * @param g
 	 *            The graphics object to use
 	 * @param format
 	 *            Page format info.
 	 * @param pagenum
 	 *            Ignored.
-	 * 
+	 *
 	 * @return Printable.PAGE_EXISTS.
 	 */
 	public int print(Graphics g, PageFormat format, int pagenum) {
@@ -756,7 +756,7 @@ public class Circuit implements Printable {
 	/**
 	 * Add this circuit to the print book, add any of its state machines, truth
 	 * tables and all subcircuits.
-	 * 
+	 *
 	 * @param book
 	 *            The book to add to.
 	 * @param format
@@ -796,9 +796,9 @@ public class Circuit implements Printable {
 
 	/**
 	 * Export an image of the circuit.
-	 * 
+	 *
 	 * <<<<<<< HEAD
-	 * 
+	 *
 	 * @param file
 	 *            The name of the file to write to.
 	 * @throws Exception
@@ -807,7 +807,7 @@ public class Circuit implements Printable {
 	 *            The name of the file to write to. >>>>>>>
 	 *            6fff4f8d5651621bfd72b14010a8a3fdd3ba837a
 	 */
-	public void exportImage(String file) throws Exception {
+	public void exportImage(String file, String formatName) throws Exception {
 
 		// get bounds of actual circuit
 		Rectangle rect = getBounds();
@@ -832,7 +832,7 @@ public class Circuit implements Printable {
 
 		// write the image
 		try {
-			ImageIO.write(image, "JPEG", new File(file));
+			ImageIO.write(image, formatName, new File(file));
 		} catch (Exception ex) {
 			System.out.println("image write exception");
 		}
@@ -856,10 +856,10 @@ public class Circuit implements Printable {
 
 	/**
 	 * Get an element from the load map.
-	 * 
+	 *
 	 * @param id
 	 *            The id of the element.
-	 * 
+	 *
 	 * @return the element with the given id, or null if not in the map.
 	 */
 	public Element getElementByID(int id) {
@@ -870,10 +870,10 @@ public class Circuit implements Printable {
 	/**
 	 * Add a name to the list of names used. If already used in the list, don't
 	 * add it.
-	 * 
+	 *
 	 * @param name
 	 *            The new name.
-	 * 
+	 *
 	 * @return false if the name is already in the list, true if not.
 	 */
 	public boolean addName(String name) {
@@ -886,10 +886,10 @@ public class Circuit implements Printable {
 
 	/**
 	 * See if this circuit already has an element with a given name.
-	 * 
+	 *
 	 * @param name
 	 *            The name to check for.
-	 * 
+	 *
 	 * @return true if the name is already used, false if not.
 	 */
 	public boolean hasName(String name) {
@@ -900,7 +900,7 @@ public class Circuit implements Printable {
 	/**
 	 * Remove a name from the list of names used. Do nothing if not there to
 	 * start with.
-	 * 
+	 *
 	 * @param name
 	 *            The name to remove.
 	 */
@@ -912,7 +912,7 @@ public class Circuit implements Printable {
 	/**
 	 * Set that this circuit is an imported circuit. This means it cannot be
 	 * saved in a file and that pins cannot be added or removed.
-	 * 
+	 *
 	 * @param sub
 	 *            The SubCircuit element in the main circuit that refers to this
 	 *            subcircuit.
@@ -924,7 +924,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * See if this is an imported circuit.
-	 * 
+	 *
 	 * @return true if it is imported, false otherwise.
 	 */
 	public boolean isImported() {
@@ -934,7 +934,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Get the SubCircuit element referring to this circuit.
-	 * 
+	 *
 	 * @return the element.
 	 */
 	public SubCircuit getSubElement() {
@@ -992,12 +992,12 @@ public class Circuit implements Printable {
 	/**
 	 * Add a jumpstart to the list of jumpstarts in this circuit. If there is
 	 * already one with the given name, do not add it.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the jumpstart.
 	 * @param start
 	 *            The jumpstart object.
-	 * 
+	 *
 	 * @return false if there already is a jumpstart with the given name, true
 	 *         otherwise.
 	 */
@@ -1011,10 +1011,10 @@ public class Circuit implements Printable {
 
 	/**
 	 * Get the jumpstart with the given name.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the desired jumpstart.
-	 * 
+	 *
 	 * @return the jumpstart, or null if it no jumpstart with the given name
 	 *         exists.
 	 */
@@ -1025,7 +1025,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Get all jump start names in alphabetical order.
-	 * 
+	 *
 	 * @return the starts.
 	 */
 	public Set<String> getJumpStartNames() {
@@ -1035,7 +1035,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Remove a jump start from the list.
-	 * 
+	 *
 	 * @param name
 	 *            The name of this jump start.
 	 */
@@ -1046,7 +1046,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Set the editor of this circuit.
-	 * 
+	 *
 	 * @param ed
 	 *            The current editor, or null to indicate not being edited.
 	 */
@@ -1057,7 +1057,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * Get the editor of this circuit.
-	 * 
+	 *
 	 * @return The current editor, or null if not being edited.
 	 */
 	public Editor getEditor() {
@@ -1076,7 +1076,7 @@ public class Circuit implements Printable {
 
 	/**
 	 * For debugging, return name and super.toString
-	 * 
+	 *
 	 * @return string version of this circuit.
 	 */
 	public String toString() {
@@ -1087,7 +1087,7 @@ public class Circuit implements Printable {
 	/**
 	 * TODO: it looks like this function could use some clean up; hints at
 	 * possible circuit encoding improvements.
-	 * 
+	 *
 	 * @param read
 	 * @return
 	 */
