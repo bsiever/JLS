@@ -494,6 +494,7 @@ public abstract class SimpleEditor extends JPanel {
 						if (currentState == State.idle) {
 
 							// start a wire
+							boolean hadSelection = !selected.isEmpty();
 							clearSelected();
 							Point p = getMousePosition();
 							if (p == null)
@@ -510,7 +511,7 @@ public abstract class SimpleEditor extends JPanel {
 							net = new WireNet();
 							net.add(wireEnd);
 							wireEnd.setNet(net);
-							if (!selected.isEmpty()) {
+							if (hadSelection) {
 								// check for overlaps
 								if (overlap()) {
 									info.setText(overlapMessage);
