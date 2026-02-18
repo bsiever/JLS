@@ -521,12 +521,6 @@ public class JumpStart extends LogicElement implements TriProp {
 			// then check name for validity
 			if (event.getSource() == ok || event.getSource() == nameField) {
 				String tname = nameField.getText();
-				if (!Util.isValidName(tname)) {
-					JOptionPane.showMessageDialog(this,
-							"Invalid name", "Error",
-							JOptionPane.ERROR_MESSAGE);
-					return;
-				}
 				try {
 					bits = Integer.parseInt(bitsField.getText());
 				}
