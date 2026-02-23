@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
@@ -1292,7 +1293,11 @@ public class JLSStart extends JFrame implements ChangeListener {
 	private static Scanner getZipScanner(String filePath){
 		try{
 			ZipFile target = new ZipFile(new File(filePath));
-			Scanner toReturn = testScanner(new Scanner(target.getInputStream(target.getEntry("JLSCircuit"))));
+			ZipEntry entry = target.getEntry("JLSCircuit");
+			if (entry == null) {
+				entry = target.getEntry("JLSCheckpoint");
+			}
+			Scanner toReturn = testScanner(new Scanner(target.getInputStream(entry)));
 //			target.close();
 			return toReturn;
 		}catch(Throwable e){
