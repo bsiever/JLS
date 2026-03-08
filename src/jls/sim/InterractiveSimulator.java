@@ -2,7 +2,6 @@ package jls.sim;
 
 import jls.*;
 import jls.elem.*;
-import jls.sim.InterractiveSimulator.Traces;
 import jls.edit.*;
 import java.awt.*;
 import java.awt.event.*;
