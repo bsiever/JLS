@@ -2,13 +2,17 @@ package jls.sim;
 
 import jls.*;
 import jls.elem.*;
+import jls.sim.InterractiveSimulator.Traces;
 import jls.edit.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.print.*;
+import java.text.NumberFormat;
 
 import javax.swing.*;
 import javax.swing.text.AbstractDocument;
+import javax.swing.text.NumberFormatter;
+
 import java.util.concurrent.*;
 import java.util.*;
 
@@ -128,15 +132,20 @@ public final class InterractiveSimulator extends Simulator {
 		// step amount
 		JLabel stepLabel = new JLabel("Step: ");
 		simParams.add(stepLabel);
-		final JTextField stepField = new JTextField("1",6);
-		AbstractDocument d = (AbstractDocument)(stepField.getDocument());
-		d.setDocumentFilter(new TextFilter(stepField));
+			// Create a NumberFormatter to allow only integers
+			NumberFormat format = NumberFormat.getIntegerInstance();
+			NumberFormatter formatter = new NumberFormatter(format);
+			formatter.setValueClass(Integer.class); // only integers
+			formatter.setAllowsInvalid(false);      // rejects letters
+		JFormattedTextField stepField = new JFormattedTextField(formatter);
+		stepField.setColumns(6);
+		stepField.setValue(1); // initial value
 		simParams.add(stepField);
 
 		// time limit
 		JLabel timeLimitLabel = new JLabel("Time Limit: ");
 		simParams.add(timeLimitLabel);
-		d = (AbstractDocument)(tlimit.getDocument());
+		AbstractDocument d = (AbstractDocument)(tlimit.getDocument());
 		TextFilter tlFilter = new TextFilter(tlimit);
 		tlFilter.setMax(Integer.MAX_VALUE);
 		d.setDocumentFilter(tlFilter);
