@@ -807,7 +807,7 @@ public class Circuit implements Printable {
 	 *            The name of the file to write to. >>>>>>>
 	 *            6fff4f8d5651621bfd72b14010a8a3fdd3ba837a
 	 */
-	public void exportImage(String file) throws Exception {
+	public void exportImage(String file, String formatName) throws Exception {
 
 		// get bounds of actual circuit
 		Rectangle rect = getBounds();
@@ -832,7 +832,7 @@ public class Circuit implements Printable {
 
 		// write the image
 		try {
-			ImageIO.write(image, "JPEG", new File(file));
+			ImageIO.write(image, formatName, new File(file));
 		} catch (Exception ex) {
 			System.out.println("image write exception");
 		}

@@ -267,7 +267,7 @@ public class JLSStart extends JFrame implements ChangeListener {
 				System.exit(1);
 			}
 			try {
-				circ.exportImage(name + ".jpg");
+				circ.exportImage(name + ".jpg", "JPEG");
 			} catch (Exception e) {
 				TellUser.err("Failed to export image for an undetermined reason", true);
 				e.printStackTrace();
@@ -1793,32 +1793,54 @@ public class JLSStart extends JFrame implements ChangeListener {
 		javax.swing.filechooser.FileFilter filter =
 			new javax.swing.filechooser.FileFilter() {
 			public boolean accept(File f) {
-				return f.getName().endsWith(".jpg") || f.isDirectory();
+				String name = f.getName();
+				return name.endsWith(".jpg") || name.endsWith(".png") || f.isDirectory();
 			}
 			public String getDescription() {
 				return "JLS Circuit Images";
 			}
 		};
+		javax.swing.filechooser.FileFilter jpgFilter =
+			new javax.swing.filechooser.FileFilter() {
+			public boolean accept(File f) {
+				return f.getName().endsWith(".jpg") || f.isDirectory();
+			}
+			public String getDescription() {
+				return "JPEG Images";
+			}
+		};
+		javax.swing.filechooser.FileFilter pngFilter =
+			new javax.swing.filechooser.FileFilter() {
+			public boolean accept(File f) {
+				return f.getName().endsWith(".png") || f.isDirectory();
+			}
+			public String getDescription() {
+				return "PNG Images";
+			}
+		};
+		chooser.addChoosableFileFilter(jpgFilter);
+		chooser.addChoosableFileFilter(pngFilter);
 		chooser.setFileFilter(filter);
 		if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) 
 			return;
 		String fileName = chooser.getSelectedFile().getName().trim();
+		javax.swing.filechooser.FileFilter selectedFilter = chooser.getFileFilter();
 		if (fileName == null || fileName.equals(""))
 			return;
-		String tempName = fileName.replaceAll("\\.jpg$","");
+		String tempName = fileName.replaceAll("\\.jpg$","").replaceAll("\\.png$", "");
 		if (!Util.isValidName(tempName)) {
 			JOptionPane.showMessageDialog(JLSInfo.frame,"Invalid file name - must contain only letters, digits & _");
 			return;
 		}
-		if (!fileName.endsWith(".jpg")) {
-			fileName = fileName + ".jpg";
+		if (!(fileName.endsWith(".jpg") || fileName.endsWith(".png"))) {
+			fileName = fileName + (selectedFilter == pngFilter ? ".png" : ".jpg");
 		}
 		String path = chooser.getCurrentDirectory() + "/";
 		fileName = path + fileName;
 		JLSInfo.setLastSelectedDirectory(path);
 		// export the image
 		Circuit circ = ed.getCircuit();
-		circ.exportImage(fileName);
+		circ.exportImage(fileName, fileName.endsWith(".png") ? "PNG" : "JPEG");
 	} // end of exportImage method
 
 	/**
