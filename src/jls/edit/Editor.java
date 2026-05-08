@@ -160,6 +160,8 @@ public final class Editor extends SimpleEditor {
 			Editor otherEditor = (Editor)edit;
 			if (otherEditor.getCircuit().isImported())
 				continue;
+			if (edit == this)
+				continue;
 			if (name.equals(otherEditor.getCircuit().getName())) {
 				JOptionPane.showMessageDialog(JLSInfo.frame,
 				"Circuit with this name already being edited");
