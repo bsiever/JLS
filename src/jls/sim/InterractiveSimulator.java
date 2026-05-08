@@ -181,8 +181,15 @@ public final class InterractiveSimulator extends Simulator {
 					public void actionPerformed(ActionEvent event) {
 						if (scaleField.getText().length() == 0)
 							scaleFactor = 1;
-						else
-							scaleFactor = Math.max(1,Integer.parseInt(scaleField.getText()));
+						else {
+							try {
+								scaleFactor = Math.max(1,Integer.parseInt(scaleField.getText()));
+							} catch (NumberFormatException ex) {
+								JOptionPane.showMessageDialog(null,
+									"Scale factor must be an integer", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							}
+						}
 						scaleField.setText(scaleFactor+"");
 						traces.setScaleFactor();
 						if (now != 0)
@@ -271,8 +278,15 @@ public final class InterractiveSimulator extends Simulator {
 						action.validate();
 						if (scaleField.getText().length() == 0)
 							scaleFactor = 1;
-						else
-							scaleFactor = Math.max(1,Integer.parseInt(scaleField.getText()));
+						else {
+							try {
+								scaleFactor = Math.max(1,Integer.parseInt(scaleField.getText()));
+							} catch (NumberFormatException ex) {
+								JOptionPane.showMessageDialog(null,
+									"Scale factor must be an integer", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							}
+						}
 						scaleField.setText(scaleFactor+"");
 						traces.setScaleFactor();
 						setMaxTime();
@@ -295,14 +309,28 @@ public final class InterractiveSimulator extends Simulator {
 						action.validate();
 						if (scaleField.getText().length() == 0)
 							scaleFactor = 1;
-						else
-							scaleFactor = Math.max(1,Integer.parseInt(scaleField.getText()));
+						else {
+							try {
+								scaleFactor = Math.max(1,Integer.parseInt(scaleField.getText()));
+							} catch (NumberFormatException ex) {
+								JOptionPane.showMessageDialog(null,
+									"Scale factor must be an integer", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							}
+						}
 						scaleField.setText(scaleFactor+"");
 						traces.setScaleFactor();
 						if (stepField.getText().length() == 0)
 							stepAmount = 1;
-						else
-							stepAmount = Math.max(1,Integer.parseInt(stepField.getText()));
+						else {
+							try {
+								stepAmount = Math.max(1,Integer.parseInt(stepField.getText()));
+							} catch (NumberFormatException ex) {
+								JOptionPane.showMessageDialog(null,
+									"Step amount must be an integer", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							}
+						}
 						stepField.setText(stepAmount+"");
 						setMaxTime();
 						if (sim == null) {
@@ -337,14 +365,28 @@ public final class InterractiveSimulator extends Simulator {
 						// set up step info
 						if (scaleField.getText().length() == 0)
 							scaleFactor = 1;
-						else
-							scaleFactor = Math.max(1,Integer.parseInt(scaleField.getText()));
+						else {
+							try {
+								scaleFactor = Math.max(1,Integer.parseInt(scaleField.getText()));
+							} catch (NumberFormatException ex) {
+								JOptionPane.showMessageDialog(null,
+									"Scale factor must be an integer", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							}
+						}
 						scaleField.setText(scaleFactor+"");
 						traces.setScaleFactor();
 						if (stepField.getText().length() == 0)
 							stepAmount = 1;
-						else
-							stepAmount = Math.max(1,Integer.parseInt(stepField.getText()));
+						else {
+							try {
+								stepAmount = Math.max(1,Integer.parseInt(stepField.getText()));
+							} catch (NumberFormatException ex) {
+								JOptionPane.showMessageDialog(null,
+									"Step amount must be an integer", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							}
+						}
 						stepField.setText(stepAmount+"");
 						setMaxTime();
 
@@ -427,8 +469,15 @@ public final class InterractiveSimulator extends Simulator {
 						action.validate();
 						if (scaleField.getText().length() == 0)
 							scaleFactor = 1;
-						else
-							scaleFactor = Math.max(1,Integer.parseInt(scaleField.getText()));
+						else {
+							try {
+								scaleFactor = Math.max(1,Integer.parseInt(scaleField.getText()));
+							} catch (NumberFormatException ex) {
+								JOptionPane.showMessageDialog(null,
+									"Scale factor must be an integer", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							}
+						}
 						scaleField.setText(scaleFactor+"");
 						traces.setScaleFactor();
 						paused = false;
@@ -476,8 +525,15 @@ public final class InterractiveSimulator extends Simulator {
 
 		if (tlimit.getText().length() == 0)
 			maxTime = 1;
-		else
-			maxTime = Math.max(1,Integer.parseInt(tlimit.getText()));
+		else {
+			try {
+				maxTime = Math.max(1,Integer.parseInt(tlimit.getText()));
+			} catch (NumberFormatException ex) {
+				JOptionPane.showMessageDialog(null,
+					"Time limit must be an integer", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			}
+		}
 		tlimit.setText(maxTime+"");
 	} // end of setMaxTime method
 
