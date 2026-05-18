@@ -1,0 +1,256 @@
+name: Build and Release
+
+# Fires only when a version tag is pushed (e.g. v4.11).
+# See RELEASING.md for the full release process.
+on:
+  push:
+    tags:
+      - 'v[0-9]*'
+
+jobs:
+  # ── 1. Compile sources and produce JLS.jar ──────────────────────────────────
+  build-jar:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Derive version from tag
+        id: version
+        # Strip the leading 'v' from the tag name (v4.11 → 4.11)
+        run: echo "version=$(echo '${{ github.ref_name }}' | sed 's/^v//')" >> "$GITHUB_OUTPUT"
+
+      - name: Compile Java sources
+        run: |
+          mkdir -p bin
+          find src -name "*.java" > sources.txt
+          # Compile targeting Java 8 (Java 21 dropped --release 7 support)
+          javac -release 8 -cp lib/jhall.jar -d bin @sources.txt
+
+      - name: Copy resource files into output tree
+        run: |
+          # Eclipse treats resources/ as a source folder; copy non-Java files to bin/
+          find resources -type f ! -name "*.java" | while IFS= read -r f; do
+            dest="bin/${f#resources/}"
+            mkdir -p "$(dirname "$dest")"
+            cp "$f" "$dest"
+          done
+
+      - name: Package runnable JAR
+        run: |
+          mkdir -p staging
+          # Extract jhall.jar, then overlay compiled classes on top
+          cd staging && jar xf ../lib/jhall.jar && cd ..
+          cp -r bin/. staging/
+          # Remove any manifest baked into jhall.jar; ours will replace it
+          rm -f staging/META-INF/MANIFEST.MF
+          printf 'Main-Class: jls.JLS\n' > MANIFEST.MF
+          jar cfm releases/JLS.jar MANIFEST.MF -C staging .
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JLS-jar
+          path: releases/JLS.jar
+
+  # ── 2. Build macOS app-image via jpackage ───────────────────────────────────
+  #
+  # Code signing is optional. If the MACOS_CERTIFICATE and
+  # MACOS_CERTIFICATE_PASSWORD secrets are present the app is signed with the
+  # imported Developer ID certificate; otherwise it ships unsigned with a
+  # Gatekeeper note in the release body. See RELEASING.md for setup details.
+  build-macos:
+    runs-on: macos-latest
+    needs: build-jar
+    env:
+      HAS_CERT: ${{ secrets.MACOS_CERTIFICATE != '' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Download JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: JLS-jar
+          # Drop into the existing contents/ dir alongside fileIcon.icns
+          path: releases/macOS/contents
+
+      - name: Import Developer ID certificate into temporary keychain
+        if: env.HAS_CERT == 'true'
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+        run: |
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain"
+          KEYCHAIN_PASSWORD="$(openssl rand -base64 20)"
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          # Keep the keychain unlocked for the duration of the job (6 h)
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          echo "$MACOS_CERTIFICATE" | base64 --decode -o "$RUNNER_TEMP/certificate.p12"
+          security import "$RUNNER_TEMP/certificate.p12" \
+            -k "$KEYCHAIN_PATH" \
+            -P "$MACOS_CERTIFICATE_PASSWORD" \
+            -T /usr/bin/codesign \
+            -T /usr/bin/jpackage
+
+          # Make the keychain searchable and allow codesign access without UI prompts
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+          security set-key-partition-list \
+            -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+      - name: Build macOS app image
+        working-directory: releases/macOS
+        env:
+          HAS_CERT: ${{ env.HAS_CERT }}
+        run: |
+          SIGN_ARGS=()
+          if [ "$HAS_CERT" = "true" ]; then
+            # Import step placed one cert in the temp keychain; jpackage picks it up automatically
+            SIGN_ARGS+=(--mac-sign)
+          fi
+
+          jpackage \
+            --type app-image \
+            --app-version "${{ needs.build-jar.outputs.version }}" \
+            --description "J(ava) Logic Simulator" \
+            --name "JLS" \
+            --icon resources/JLS.icns \
+            --resource-dir resources \
+            --mac-package-identifier "info.siever.JLS" \
+            --mac-package-name "JLS" \
+            --file-associations associations.properties \
+            --input contents \
+            --main-jar JLS.jar \
+            --main-class jls.JLS \
+            --mac-app-category education \
+            "${SIGN_ARGS[@]}"
+
+          zip -r JLS_macOS.zip JLS.app
+
+      - name: Remove temporary signing keychain
+        # Always clean up, even if the build step failed
+        if: always() && env.HAS_CERT == 'true'
+        run: security delete-keychain "$RUNNER_TEMP/build.keychain"
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JLS-macOS
+          path: releases/macOS/JLS_macOS.zip
+
+  # ── 3. Build Windows app-image via jpackage ─────────────────────────────────
+  build-windows:
+    runs-on: windows-latest
+    needs: build-jar
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Download JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: JLS-jar
+          # Drop into the existing contents/ dir alongside fileIcon.ico
+          path: releases/windows/contents
+
+      - name: Build Windows app image
+        working-directory: releases/windows
+        shell: pwsh
+        run: |
+          # Windows version strings require Major.Minor.Patch; append .0
+          jpackage `
+            --type app-image `
+            --app-version "${{ needs.build-jar.outputs.version }}.0" `
+            --description "J(ava) Logic Simulator" `
+            --name "JLS" `
+            --icon resources/JLS.ico `
+            --file-associations associations.properties `
+            --input contents `
+            --main-jar JLS.jar `
+            --main-class jls.JLS
+          Compress-Archive -Path JLS -DestinationPath JLS_windows.zip
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JLS-windows
+          path: releases/windows/JLS_windows.zip
+
+  # ── 4. Publish GitHub Release with all three assets ─────────────────────────
+  create-release:
+    runs-on: ubuntu-latest
+    needs: [build-jar, build-macos, build-windows]
+    permissions:
+      contents: write
+    env:
+      SIGNED: ${{ secrets.MACOS_CERTIFICATE != '' }}
+
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create GitHub Release (signed macOS build)
+        if: env.SIGNED == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "JLS ${{ needs.build-jar.outputs.version }}"
+          body: |
+            ## Downloads
+
+            | File | Description |
+            |------|-------------|
+            | `JLS.jar` | Cross-platform runnable JAR (requires Java 8+) |
+            | `JLS_macOS.zip` | macOS application bundle — signed with Developer ID; unzip and drag JLS.app to Applications |
+            | `JLS_windows.zip` | Windows application bundle — unzip and run `JLS\JLS.exe` |
+          files: |
+            artifacts/JLS-jar/JLS.jar
+            artifacts/JLS-macOS/JLS_macOS.zip
+            artifacts/JLS-windows/JLS_windows.zip
+
+      - name: Create GitHub Release (unsigned macOS build)
+        if: env.SIGNED == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "JLS ${{ needs.build-jar.outputs.version }}"
+          body: |
+            ## Downloads
+
+            | File | Description |
+            |------|-------------|
+            | `JLS.jar` | Cross-platform runnable JAR (requires Java 8+) |
+            | `JLS_macOS.zip` | macOS application bundle — unzip and drag JLS.app to Applications |
+            | `JLS_windows.zip` | Windows application bundle — unzip and run `JLS\JLS.exe` |
+
+            > **macOS note:** This build is not code-signed. On first launch, right-click
+            > JLS.app and choose **Open** to allow Gatekeeper to run it.
+          files: |
+            artifacts/JLS-jar/JLS.jar
+            artifacts/JLS-macOS/JLS_macOS.zip
+            artifacts/JLS-windows/JLS_windows.zip
