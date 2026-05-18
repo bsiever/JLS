@@ -182,7 +182,7 @@ jobs:
         run: |
           # Windows version strings require Major.Minor.Patch; append .0
           jpackage `
-            --type app-image `
+            --type exe `
             --app-version "${{ needs.build-jar.outputs.version }}.0" `
             --description "J(ava) Logic Simulator" `
             --name "JLS" `
