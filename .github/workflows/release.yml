@@ -191,7 +191,7 @@ jobs:
             --input contents `
             --main-jar JLS.jar `
             --main-class jls.JLS
-          Compress-Archive -Path JLS -DestinationPath JLS_windows.zip
+          Compress-Archive -Path JLS -DestinationPath JLS_windows.zip -Force
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
