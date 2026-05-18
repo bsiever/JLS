@@ -176,7 +176,17 @@ jobs:
           # Drop into the existing contents/ dir alongside fileIcon.ico
           path: releases/windows/contents
 
-      - name: Build Windows app image
+      - name: Add WiX Toolset to PATH
+        shell: pwsh
+        run: |
+          # jpackage --type exe requires WiX candle.exe / light.exe.
+          # WiX v3 is pre-installed on GitHub's Windows runner but not in PATH.
+          $wixDir = Get-ChildItem "C:\Program Files (x86)" -Filter "WiX Toolset*" -Directory |
+                    Sort-Object Name -Descending | Select-Object -First 1
+          if (-not $wixDir) { throw "WiX Toolset not found on this runner" }
+          "$($wixDir.FullName)\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Build Windows installer
         working-directory: releases/windows
         shell: pwsh
         run: |
@@ -187,18 +197,23 @@ jobs:
             --description "J(ava) Logic Simulator" `
             --name "JLS" `
             --icon resources/JLS.ico `
-            --win-menu `
             --file-associations associations.properties `
             --input contents `
             --main-jar JLS.jar `
-            --main-class jls.JLS
-          Compress-Archive JLS.exe -DestinationPath JLS_windows.zip -Force
+            --main-class jls.JLS `
+            --win-shortcut `
+            --win-menu `
+            --win-dir-chooser
+
+          # jpackage names the output JLS-<version>.exe; rename to a stable asset name
+          Get-ChildItem -Filter "JLS-*.exe" | Rename-Item -NewName "JLS_windows.exe"
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
           name: JLS-windows
-          path: releases/windows/JLS_windows.zip
+          path: releases/windows/JLS_windows.exe
+
 
   # ── 4. Publish GitHub Release with all three assets ─────────────────────────
   create-release:
