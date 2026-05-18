@@ -187,11 +187,12 @@ jobs:
             --description "J(ava) Logic Simulator" `
             --name "JLS" `
             --icon resources/JLS.ico `
+            --win-menu `
             --file-associations associations.properties `
             --input contents `
             --main-jar JLS.jar `
             --main-class jls.JLS
-          Compress-Archive -Path JLS -DestinationPath JLS_windows.zip -Force
+          Compress-Archive JLS.exe -DestinationPath JLS_windows.zip -Force
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
