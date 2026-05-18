@@ -155,7 +155,7 @@ jobs:
           name: JLS-macOS
           path: releases/macOS/JLS_macOS.zip
 
-  # ── 3. Build Windows app-image via jpackage ─────────────────────────────────
+  # ── 3. Build Windows installer exe via jpackage ─────────────────────────────
   build-windows:
     runs-on: windows-latest
     needs: build-jar
@@ -176,13 +176,23 @@ jobs:
           # Drop into the existing contents/ dir alongside fileIcon.ico
           path: releases/windows/contents
 
-      - name: Build Windows app image
+      - name: Add WiX Toolset to PATH
+        shell: pwsh
+        run: |
+          # jpackage --type exe requires WiX candle.exe / light.exe.
+          # WiX v3 is pre-installed on GitHub's Windows runner but not in PATH.
+          $wixDir = Get-ChildItem "C:\Program Files (x86)" -Filter "WiX Toolset*" -Directory |
+                    Sort-Object Name -Descending | Select-Object -First 1
+          if (-not $wixDir) { throw "WiX Toolset not found on this runner" }
+          "$($wixDir.FullName)\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Build Windows installer
         working-directory: releases/windows
         shell: pwsh
         run: |
           # Windows version strings require Major.Minor.Patch; append .0
           jpackage `
-            --type app-image `
+            --type exe `
             --app-version "${{ needs.build-jar.outputs.version }}.0" `
             --description "J(ava) Logic Simulator" `
             --name "JLS" `
@@ -190,14 +200,19 @@ jobs:
             --file-associations associations.properties `
             --input contents `
             --main-jar JLS.jar `
-            --main-class jls.JLS
-          Compress-Archive -Path JLS -DestinationPath JLS_windows.zip
+            --main-class jls.JLS `
+            --win-shortcut `
+            --win-menu `
+            --win-dir-chooser
+
+          # jpackage names the output JLS-<version>.exe; rename to a stable asset name
+          Get-ChildItem -Filter "JLS-*.exe" | Rename-Item -NewName "JLS_windows.exe"
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
           name: JLS-windows
-          path: releases/windows/JLS_windows.zip
+          path: releases/windows/JLS_windows.exe
 
   # ── 4. Publish GitHub Release with all three assets ─────────────────────────
   create-release:
@@ -227,11 +242,11 @@ jobs:
             |------|-------------|
             | `JLS.jar` | Cross-platform runnable JAR (requires Java 8+) |
             | `JLS_macOS.zip` | macOS application bundle — signed with Developer ID; unzip and drag JLS.app to Applications |
-            | `JLS_windows.zip` | Windows application bundle — unzip and run `JLS\JLS.exe` |
+            | `JLS_windows.exe` | Windows installer — double-click to install; creates Start Menu entry and desktop shortcut |
           files: |
             artifacts/JLS-jar/JLS.jar
             artifacts/JLS-macOS/JLS_macOS.zip
-            artifacts/JLS-windows/JLS_windows.zip
+            artifacts/JLS-windows/JLS_windows.exe
 
       - name: Create GitHub Release (unsigned macOS build)
         if: env.SIGNED == 'false'
@@ -246,11 +261,11 @@ jobs:
             |------|-------------|
             | `JLS.jar` | Cross-platform runnable JAR (requires Java 8+) |
             | `JLS_macOS.zip` | macOS application bundle — unzip and drag JLS.app to Applications |
-            | `JLS_windows.zip` | Windows application bundle — unzip and run `JLS\JLS.exe` |
+            | `JLS_windows.exe` | Windows installer — double-click to install; creates Start Menu entry and desktop shortcut |
 
             > **macOS note:** This build is not code-signed. On first launch, right-click
             > JLS.app and choose **Open** to allow Gatekeeper to run it.
           files: |
             artifacts/JLS-jar/JLS.jar
             artifacts/JLS-macOS/JLS_macOS.zip
-            artifacts/JLS-windows/JLS_windows.zip
+            artifacts/JLS-windows/JLS_windows.exe
