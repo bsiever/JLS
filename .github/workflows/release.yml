@@ -33,7 +33,7 @@ jobs:
           mkdir -p bin
           find src -name "*.java" > sources.txt
           # Compile targeting Java 8 (Java 21 dropped --release 7 support)
-          javac -release 8 -cp lib/jhall.jar -d bin @sources.txt
+          javac -cp lib/jhall.jar -d bin @sources.txt
 
       - name: Copy resource files into output tree
         run: |
