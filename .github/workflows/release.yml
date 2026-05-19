@@ -196,11 +196,11 @@ jobs:
             JLS.app/Contents/runtime
 
           # 4. Sign the outer app bundle (must be last).
-          #    --force is required: jpackage always adds an ad-hoc signature to the
-          #    bundle even without --mac-sign, so codesign refuses without it.
-          #    Do NOT sign Contents/MacOS/JLS explicitly beforehand — the outer
-          #    bundle signing handles that with the entitlements file applied here.
-          codesign --force --options runtime \
+          #    Remove jpackage's ad-hoc signature cleanly before signing — this
+          #    avoids --force, which can disrupt the already-sealed runtime
+          #    sub-bundle and produce invalid signatures in Apple's notarization.
+          codesign --remove-signature JLS.app
+          codesign --options runtime \
             --entitlements JLS.entitlements \
             --sign "$SIGNING_IDENTITY" \
             --timestamp \
@@ -210,7 +210,8 @@ jobs:
 
       - name: Zip macOS app
         working-directory: releases/macOS
-        run: zip -r JLS_macOS.zip JLS.app
+        # ditto preserves HFS+ metadata; Apple recommends it over zip for notarization archives
+        run: ditto -c -k --sequesterRsrc --keepParent JLS.app JLS_macOS.zip
 
       - name: Notarize and staple macOS app
         # Requires signing to have run first (HAS_CERT) and Apple credentials (HAS_NOTARIZE)
@@ -256,7 +257,7 @@ jobs:
 
           # Re-zip with the stapled app
           rm JLS_macOS.zip
-          zip -r JLS_macOS.zip JLS.app
+          ditto -c -k --sequesterRsrc --keepParent JLS.app JLS_macOS.zip
 
       - name: Remove temporary signing keychain
         # Always clean up, even if the build step failed
