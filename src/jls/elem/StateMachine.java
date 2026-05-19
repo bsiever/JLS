@@ -809,6 +809,7 @@ public final class StateMachine extends LogicElement implements Printable {
 		private Point movingPoint;
 		private boolean nameChange;
 		private StateMachine machine;
+		private boolean creating;
 
 		/**
 		 * Set up create dialog window.
@@ -824,6 +825,7 @@ public final class StateMachine extends LogicElement implements Printable {
 			// save reference to me
 			currentDialog = this;
 			this.machine = machine;
+			this.creating = creating;
 			
 			// set not canceled
 			canceled = false;
@@ -1057,6 +1059,20 @@ public final class StateMachine extends LogicElement implements Printable {
 				}
 				else {
 					nameChange = true;
+				}
+				if (creating) {
+					String message = "";
+					if (states.isEmpty() && name.trim().isEmpty()) {
+						message = "You need a name and at least one state.";
+					} else if (states.isEmpty()) {
+						message = "You need at least one state.";
+					} else if (name.trim().isEmpty()) {
+						message = "You need a name.";
+					}
+					if (!message.isEmpty()) {
+						JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 				}
 				dispose();
 			}
