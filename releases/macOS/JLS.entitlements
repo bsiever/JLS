@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- JVM requires permission to write and execute memory for JIT compilation -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+    <!-- JVM requires unsigned executable memory for interpreter and runtime stubs -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+    <!-- Bundled JRE libraries (Temurin) are signed by Adoptium, not by this app's
+         Developer ID. This entitlement allows loading them without a signature
+         chain match. jpackage re-signs the bundle, but some native libs may still
+         trigger library validation failures without this. -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+</dict>
+</plist>

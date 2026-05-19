@@ -155,6 +155,7 @@ jobs:
             --main-jar JLS.jar \
             --main-class jls.JLS \
             --mac-app-category education \
+            --mac-entitlements JLS.entitlements \
             "${SIGN_ARGS[@]}"
 
           zip -r JLS_macOS.zip JLS.app
@@ -168,12 +169,28 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
         run: |
-          # Submit the signed zip to Apple's notary service and wait for approval
-          xcrun notarytool submit JLS_macOS.zip \
+          # Submit the signed zip to Apple's notary service and wait for approval.
+          # Capture output so we can extract the submission ID and fetch the
+          # rejection log if Apple returns status: Invalid.
+          NOTARIZE_OUTPUT=$(xcrun notarytool submit JLS_macOS.zip \
             --apple-id "$APPLE_ID" \
             --team-id "$APPLE_TEAM_ID" \
             --password "$APPLE_APP_PASSWORD" \
-            --wait
+            --wait 2>&1)
+          echo "$NOTARIZE_OUTPUT"
+
+          if ! echo "$NOTARIZE_OUTPUT" | grep -q "status: Accepted"; then
+            SUBMISSION_ID=$(echo "$NOTARIZE_OUTPUT" | grep -E '^\s+id:' | head -1 | awk '{print $2}')
+            if [ -n "$SUBMISSION_ID" ]; then
+              echo "--- Apple notarization rejection log ---"
+              xcrun notarytool log "$SUBMISSION_ID" \
+                --apple-id "$APPLE_ID" \
+                --team-id "$APPLE_TEAM_ID" \
+                --password "$APPLE_APP_PASSWORD"
+            fi
+            exit 1
+          fi
+
           # Staple the ticket so Gatekeeper accepts the app offline.
           # notarytool --wait returns once Apple approves, but the ticket
           # can take a few minutes to propagate to Apple's CDN. Retry up
@@ -184,6 +201,7 @@ jobs:
             echo "Stapling attempt $attempt failed — waiting 30s for CDN propagation..."
             sleep 30
           done
+
           # Re-zip with the stapled app
           rm JLS_macOS.zip
           zip -r JLS_macOS.zip JLS.app
