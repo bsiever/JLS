@@ -29,8 +29,13 @@ jobs:
         id: version
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            # Manual run: use the most recent tag reachable from HEAD
-            TAG=$(git describe --tags --abbrev=0)
+            # Manual run: find the highest version tag; fall back to JLSInfo.java if none exist yet
+            TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]' | head -1)
+            if [ -z "$TAG" ]; then
+              VERS=$(grep -E 'public static final int vers\s*=' src/jls/JLSInfo.java | grep -oE '[0-9]+' | head -1)
+              REL=$(grep -E 'public static final int release\s*=' src/jls/JLSInfo.java | grep -oE '[0-9]+' | head -1)
+              TAG="v${VERS}.${REL}"
+            fi
           else
             TAG="${{ github.ref_name }}"
           fi
