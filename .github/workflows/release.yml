@@ -195,15 +195,10 @@ jobs:
             --timestamp \
             JLS.app/Contents/runtime
 
-          # 4. Sign the main app launcher with JVM entitlements
-          codesign --force --options runtime \
-            --entitlements JLS.entitlements \
-            --sign "$SIGNING_IDENTITY" \
-            --timestamp \
-            JLS.app/Contents/MacOS/JLS
-
-          # 5. Sign the outer app bundle (must be last)
-          codesign --force --options runtime \
+          # 4. Sign the outer app bundle (must be last; no --force because jpackage
+          #    did not sign the bundle — --force would re-seal the already-signed
+          #    runtime sub-bundle and invalidate libjli.dylib's bundle signature)
+          codesign --options runtime \
             --entitlements JLS.entitlements \
             --sign "$SIGNING_IDENTITY" \
             --timestamp \
