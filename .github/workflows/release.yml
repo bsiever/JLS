@@ -243,11 +243,11 @@ jobs:
             |------|-------------|
             | `JLS.jar` | Cross-platform runnable JAR (requires Java 8+) |
             | `JLS_macOS.zip` | macOS application bundle — signed with Developer ID; unzip and drag JLS.app to Applications |
-            | `JLS_windows.zip` | Windows application bundle — unzip and run `JLS\JLS.exe` |
+            | `JLS_windows.exe` | Windows installer — double-click to install |
           files: |
             artifacts/JLS-jar/JLS.jar
             artifacts/JLS-macOS/JLS_macOS.zip
-            artifacts/JLS-windows/JLS_windows.zip
+            artifacts/JLS-windows/JLS_windows.exe
 
       - name: Create GitHub Release (unsigned macOS build)
         if: env.SIGNED == 'false'
@@ -262,11 +262,11 @@ jobs:
             |------|-------------|
             | `JLS.jar` | Cross-platform runnable JAR (requires Java 8+) |
             | `JLS_macOS.zip` | macOS application bundle — unzip and drag JLS.app to Applications |
-            | `JLS_windows.zip` | Windows application bundle — unzip and run `JLS\JLS.exe` |
+            | `JLS_windows.exe` | Windows installer — double-click to install |
 
             > **macOS note:** This build is not code-signed. On first launch, right-click
             > JLS.app and choose **Open** to allow Gatekeeper to run it.
           files: |
             artifacts/JLS-jar/JLS.jar
             artifacts/JLS-macOS/JLS_macOS.zip
-            artifacts/JLS-windows/JLS_windows.zip
+            artifacts/JLS-windows/JLS_windows.exe
