@@ -161,34 +161,48 @@ jobs:
           echo "Signing with: $SIGNING_IDENTITY"
 
           # codesign --deep is deprecated and unreliable for jpackage bundles.
-          # Sign explicitly from the inside out: nested binaries must be signed
-          # before the bundle that contains them or the outer signature breaks.
+          # Sign explicitly from the inside out: nested binaries and sub-bundles
+          # must be fully signed before the bundle that contains them.
 
-          # 1. Sign all dylibs and shared libraries (order among them doesn't matter)
-          find JLS.app -type f \( -name "*.dylib" -o -name "*.so" \) | \
+          # 1. Sign all dylibs and shared libraries (include symlinks — many JRE
+          #    libs in runtime/Contents/Home/lib/ are symlinked).
+          find JLS.app \( -type f -o -type l \) \( -name "*.dylib" -o -name "*.so" \) | \
             while IFS= read -r f; do
               codesign --force --options runtime \
                 --sign "$SIGNING_IDENTITY" \
                 --timestamp "$f"
             done
 
-          # 2. Sign executables inside the bundled JRE (java, javac, etc.)
-          find JLS.app/Contents/runtime -type f -perm /0111 \
+          # 2. Sign Mach-O executables inside the bundled JRE (jspawnhelper,
+          #    java, javac, etc.). Use `file` to identify actual Mach-O binaries
+          #    and skip shell scripts, which codesign cannot sign.
+          find JLS.app/Contents/runtime \( -type f -o -type l \) \
             ! -name "*.dylib" ! -name "*.so" ! -name "*.jar" | \
             while IFS= read -r f; do
-              codesign --force --options runtime \
-                --sign "$SIGNING_IDENTITY" \
-                --timestamp "$f" 2>/dev/null || true
+              if file "$f" 2>/dev/null | grep -q "Mach-O"; then
+                codesign --force --options runtime \
+                  --sign "$SIGNING_IDENTITY" \
+                  --timestamp "$f"
+              fi
             done
 
-          # 3. Sign the main app launcher with JVM entitlements
+          # 3. Sign the runtime sub-bundle as a bundle.
+          #    runtime/ contains its own Contents/MacOS/ so codesign treats it as
+          #    a nested bundle; it must be sealed before the outer app is signed,
+          #    otherwise libjli.dylib and the main launcher get invalid signatures.
+          codesign --force --options runtime \
+            --sign "$SIGNING_IDENTITY" \
+            --timestamp \
+            JLS.app/Contents/runtime
+
+          # 4. Sign the main app launcher with JVM entitlements
           codesign --force --options runtime \
             --entitlements JLS.entitlements \
             --sign "$SIGNING_IDENTITY" \
             --timestamp \
             JLS.app/Contents/MacOS/JLS
 
-          # 4. Sign the app bundle itself (must be last)
+          # 5. Sign the outer app bundle (must be last)
           codesign --force --options runtime \
             --entitlements JLS.entitlements \
             --sign "$SIGNING_IDENTITY" \
