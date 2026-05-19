@@ -7,7 +7,7 @@ then builds three artifacts automatically and publishes them as a GitHub Release
 |----------|-------------|
 | `JLS.jar` | Cross-platform runnable JAR (requires Java 8+) |
 | `JLS_macOS.zip` | macOS application bundle (via jpackage, bundled JRE) |
-| `JLS_windows.zip` | Windows application bundle (via jpackage, bundled JRE) |
+| `JLS_windows.exe` | Windows installer (via jpackage, bundled JRE) |
 
 ---
 
@@ -93,43 +93,59 @@ This copies the base64 string to the clipboard.
 ### Step 3 — Add secrets to the GitHub repository
 
 In the repository go to **Settings → Secrets and variables → Actions → New
-repository secret** and add the following two secrets:
+repository secret** and add all five secrets:
 
 | Secret name | Value |
 |-------------|-------|
 | `MACOS_CERTIFICATE` | The base64 string from step 2 |
 | `MACOS_CERTIFICATE_PASSWORD` | The export password you set in step 1 |
+| `APPLE_ID` | Your Apple ID email, e.g. `you@example.com` |
+| `APPLE_TEAM_ID` | Your 10-character team ID — visible at [developer.apple.com/account](https://developer.apple.com/account) under Membership |
+| `APPLE_APP_PASSWORD` | An app-specific password — generate one at [appleid.apple.com](https://appleid.apple.com) under Sign-In and Security → App-Specific Passwords |
 
-> **Do not commit the .p12 file or the password to the repository.**
+> **Do not commit the .p12 file or passwords to the repository.**
 
 ### Step 4 — Push a new release tag
 
-That's it. On the next tag push the workflow detects that `MACOS_CERTIFICATE`
-is set, imports the certificate into a temporary keychain on the macOS runner,
-passes `--mac-sign` to jpackage, and deletes the keychain when done.
+That's it. On the next tag push the workflow will:
 
-The release body will confirm whether the macOS build is signed.
+1. Import the certificate into a temporary keychain and sign the app with `--mac-sign`
+2. Submit the signed zip to Apple's notary service and wait for approval (typically 1–3 minutes)
+3. Staple the notarization ticket to `JLS.app` so Gatekeeper accepts it offline
+4. Re-zip and publish — users can open the app directly with no warnings
 
-### How the signing works in the workflow
+### How the signing and notarization work in the workflow
 
 The relevant steps in `.github/workflows/release.yml` are:
 
 1. **Import Developer ID certificate into temporary keychain** — decodes the
    base64 secret, creates a short-lived keychain in `$RUNNER_TEMP`, imports the
    `.p12`, and grants `codesign` and `jpackage` access without UI prompts.
-2. **Build macOS app image** — calls jpackage with `--mac-sign` when the
-   certificate is present. jpackage locates the single Developer ID certificate
-   in the temporary keychain automatically.
-3. **Remove temporary signing keychain** — runs unconditionally (even on build
+2. **Build macOS app image** — calls jpackage with `--mac-sign`; jpackage
+   locates the single Developer ID certificate in the temporary keychain automatically.
+3. **Notarize and staple macOS app** — submits the signed zip to Apple's notary
+   service with `xcrun notarytool submit --wait`, then staples the returned
+   ticket with `xcrun stapler staple` and re-zips.
+4. **Remove temporary signing keychain** — runs unconditionally (even on build
    failure) to ensure the certificate is not left on the runner.
 
-### Notarization (future step)
+---
 
-Signing satisfies Gatekeeper for direct downloads. For full notarization
-(required for distribution outside the Mac App Store without any Gatekeeper
-prompt) you additionally need to submit the signed `.app` to Apple's notary
-service using `xcrun notarytool`. This can be added as an extra workflow step
-using the secrets `APPLE_ID`, `APPLE_TEAM_ID`, and an app-specific password.
+## Installing an unsigned macOS build
+
+Without signing and notarization, macOS Ventura (13) and later will report
+the app as **"damaged and can't be opened"** when it is downloaded from the
+internet. This is a Gatekeeper quarantine warning, not actual damage.
+
+To run the app, open Terminal and run this command after unzipping:
+
+```bash
+xattr -cr /path/to/JLS.app
+```
+
+Then double-click the app normally. You only need to do this once per
+downloaded copy. Setting up the `MACOS_CERTIFICATE` secret (see above)
+eliminates this step entirely for your users.
 
 ---
 

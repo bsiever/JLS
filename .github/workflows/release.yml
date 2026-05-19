@@ -76,15 +76,17 @@ jobs:
 
   # ── 2. Build macOS app-image via jpackage ───────────────────────────────────
   #
-  # Code signing is optional. If the MACOS_CERTIFICATE and
-  # MACOS_CERTIFICATE_PASSWORD secrets are present the app is signed with the
-  # imported Developer ID certificate; otherwise it ships unsigned with a
-  # Gatekeeper note in the release body. See RELEASING.md for setup details.
+  # Signing and notarization are both optional but recommended.
+  # - Set MACOS_CERTIFICATE + MACOS_CERTIFICATE_PASSWORD to enable signing.
+  # - Also set APPLE_ID + APPLE_TEAM_ID + APPLE_APP_PASSWORD to enable
+  #   notarization, which eliminates the Gatekeeper "damaged" prompt entirely.
+  # See RELEASING.md for setup details.
   build-macos:
     runs-on: macos-latest
     needs: build-jar
     env:
       HAS_CERT: ${{ secrets.MACOS_CERTIFICATE != '' }}
+      HAS_NOTARIZE: ${{ secrets.APPLE_ID != '' }}
 
     steps:
       - uses: actions/checkout@v6
@@ -155,6 +157,27 @@ jobs:
             --mac-app-category education \
             "${SIGN_ARGS[@]}"
 
+          zip -r JLS_macOS.zip JLS.app
+
+      - name: Notarize and staple macOS app
+        # Requires signing to have run first (HAS_CERT) and Apple credentials (HAS_NOTARIZE)
+        if: env.HAS_CERT == 'true' && env.HAS_NOTARIZE == 'true'
+        working-directory: releases/macOS
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+        run: |
+          # Submit the signed zip to Apple's notary service and wait for approval
+          xcrun notarytool submit JLS_macOS.zip \
+            --apple-id "$APPLE_ID" \
+            --team-id "$APPLE_TEAM_ID" \
+            --password "$APPLE_APP_PASSWORD" \
+            --wait
+          # Staple the ticket so Gatekeeper accepts the app offline
+          xcrun stapler staple JLS.app
+          # Re-zip with the stapled app
+          rm JLS_macOS.zip
           zip -r JLS_macOS.zip JLS.app
 
       - name: Remove temporary signing keychain
@@ -235,7 +258,7 @@ jobs:
     permissions:
       contents: write
     env:
-      SIGNED: ${{ secrets.MACOS_CERTIFICATE != '' }}
+      NOTARIZED: ${{ secrets.APPLE_ID != '' }}
 
     steps:
       - name: Download all build artifacts
@@ -243,8 +266,8 @@ jobs:
         with:
           path: artifacts
 
-      - name: Create GitHub Release (signed macOS build)
-        if: env.SIGNED == 'true'
+      - name: Create GitHub Release (notarized macOS build)
+        if: env.NOTARIZED == 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
@@ -255,7 +278,7 @@ jobs:
             | File | Description |
             |------|-------------|
             | `JLS.jar` | Cross-platform runnable JAR (requires Java 8+) |
-            | `JLS_macOS.zip` | macOS application bundle — signed with Developer ID; unzip and drag JLS.app to Applications |
+            | `JLS_macOS.zip` | macOS application bundle — unzip and double-click JLS.app |
             | `JLS_windows.exe` | Windows installer — double-click to install |
           files: |
             artifacts/JLS-jar/JLS.jar
@@ -263,7 +286,7 @@ jobs:
             artifacts/JLS-windows/JLS_windows.exe
 
       - name: Create GitHub Release (unsigned macOS build)
-        if: env.SIGNED == 'false'
+        if: env.NOTARIZED == 'false'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
@@ -274,11 +297,17 @@ jobs:
             | File | Description |
             |------|-------------|
             | `JLS.jar` | Cross-platform runnable JAR (requires Java 8+) |
-            | `JLS_macOS.zip` | macOS application bundle — unzip and drag JLS.app to Applications |
+            | `JLS_macOS.zip` | macOS application bundle — see note below before opening |
             | `JLS_windows.exe` | Windows installer — double-click to install |
 
-            > **macOS note:** This build is not code-signed. On first launch, right-click
-            > JLS.app and choose **Open** to allow Gatekeeper to run it.
+            > **macOS note:** This build is not notarized. macOS Ventura and later will
+            > report the app as "damaged". To fix, unzip, then run this command in Terminal
+            > before opening the app:
+            > ```
+            > xattr -cr JLS.app
+            > ```
+            > See [RELEASING.md](../../blob/master/RELEASING.md) for how to set up signing
+            > and notarization to eliminate this step.
           files: |
             artifacts/JLS-jar/JLS.jar
             artifacts/JLS-macOS/JLS_macOS.zip
