@@ -160,11 +160,36 @@ jobs:
             | grep "Developer ID Application" | head -1 | sed 's/.*"\(.*\)"/\1/')
           echo "Signing with: $SIGNING_IDENTITY"
 
-          # --deep re-signs all nested binaries and dylibs in one pass.
-          # --options runtime enables the hardened runtime (required for notarization).
-          # --timestamp embeds a secure timestamp (also required for notarization).
-          # --entitlements grants the JVM exceptions it needs under hardened runtime.
-          codesign --force --deep --options runtime \
+          # codesign --deep is deprecated and unreliable for jpackage bundles.
+          # Sign explicitly from the inside out: nested binaries must be signed
+          # before the bundle that contains them or the outer signature breaks.
+
+          # 1. Sign all dylibs and shared libraries (order among them doesn't matter)
+          find JLS.app -type f \( -name "*.dylib" -o -name "*.so" \) | \
+            while IFS= read -r f; do
+              codesign --force --options runtime \
+                --sign "$SIGNING_IDENTITY" \
+                --timestamp "$f"
+            done
+
+          # 2. Sign executables inside the bundled JRE (java, javac, etc.)
+          find JLS.app/Contents/runtime -type f -perm /0111 \
+            ! -name "*.dylib" ! -name "*.so" ! -name "*.jar" | \
+            while IFS= read -r f; do
+              codesign --force --options runtime \
+                --sign "$SIGNING_IDENTITY" \
+                --timestamp "$f" 2>/dev/null || true
+            done
+
+          # 3. Sign the main app launcher with JVM entitlements
+          codesign --force --options runtime \
+            --entitlements JLS.entitlements \
+            --sign "$SIGNING_IDENTITY" \
+            --timestamp \
+            JLS.app/Contents/MacOS/JLS
+
+          # 4. Sign the app bundle itself (must be last)
+          codesign --force --options runtime \
             --entitlements JLS.entitlements \
             --sign "$SIGNING_IDENTITY" \
             --timestamp \
