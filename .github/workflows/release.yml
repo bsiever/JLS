@@ -174,8 +174,16 @@ jobs:
             --team-id "$APPLE_TEAM_ID" \
             --password "$APPLE_APP_PASSWORD" \
             --wait
-          # Staple the ticket so Gatekeeper accepts the app offline
-          xcrun stapler staple JLS.app
+          # Staple the ticket so Gatekeeper accepts the app offline.
+          # notarytool --wait returns once Apple approves, but the ticket
+          # can take a few minutes to propagate to Apple's CDN. Retry up
+          # to 5 times with a 30-second pause between attempts.
+          for attempt in 1 2 3 4 5; do
+            xcrun stapler staple JLS.app && break
+            if [ "$attempt" = "5" ]; then echo "Stapling failed after 5 attempts" && exit 1; fi
+            echo "Stapling attempt $attempt failed — waiting 30s for CDN propagation..."
+            sleep 30
+          done
           # Re-zip with the stapled app
           rm JLS_macOS.zip
           zip -r JLS_macOS.zip JLS.app
