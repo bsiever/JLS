@@ -490,10 +490,12 @@ public abstract class SimpleEditor extends JPanel {
 						if (!enabled)
 							return;
 
-						// if nothing selected and current state is idle
-						if (selected.size() == 0 && currentState == State.idle) {
+						// if current state is idle
+						if (currentState == State.idle) {
 
 							// start a wire
+							boolean hadSelection = !selected.isEmpty();
+							clearSelected();
 							Point p = getMousePosition();
 							if (p == null)
 								return; // not in drawing window
@@ -509,6 +511,17 @@ public abstract class SimpleEditor extends JPanel {
 							net = new WireNet();
 							net.add(wireEnd);
 							wireEnd.setNet(net);
+							if (hadSelection) {
+								// check for overlaps
+								if (overlap()) {
+									info.setText(overlapMessage);
+									info.setForeground(Color.red);
+								}
+								else {
+									info.setText("");
+									info.setForeground(Color.black);
+								}
+							}
 							repaint();
 						}
 						else if (selected.size() == 1){
