@@ -25,8 +25,14 @@ jobs:
 
       - name: Derive version from tag
         id: version
-        # Strip the leading 'v' from the tag name (v4.11 → 4.11)
-        run: echo "version=$(echo '${{ github.ref_name }}' | sed 's/^v//')" >> "$GITHUB_OUTPUT"
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # Manual run: use the most recent tag reachable from HEAD
+            TAG=$(git describe --tags --abbrev=0)
+          else
+            TAG="${{ github.ref_name }}"
+          fi
+          echo "version=$(echo "$TAG" | sed 's/^v//')" >> "$GITHUB_OUTPUT"
 
       - name: Compile Java sources
         run: |
