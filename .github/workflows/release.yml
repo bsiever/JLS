@@ -56,6 +56,12 @@ jobs:
             mkdir -p "$(dirname "$dest")"
             cp "$f" "$dest"
           done
+          # Copy non-Java resources from src/ (images, tutorial files, etc.)
+          find src -type f ! -name "*.java" | while IFS= read -r f; do
+            dest="bin/${f#src/}"
+            mkdir -p "$(dirname "$dest")"
+            cp "$f" "$dest"
+          done
 
       - name: Package runnable JAR
         run: |
