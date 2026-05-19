@@ -134,6 +134,8 @@ public class JLSStart extends JFrame implements ChangeListener {
 			}
 			
 			Scanner input = getScannerForFile(startFile);
+			if (input == null)
+				System.exit(1);
 
 			// create new circuit
 			Circuit circ = new Circuit(cname);
@@ -1130,6 +1132,8 @@ public class JLSStart extends JFrame implements ChangeListener {
 		}
 		
 		Scanner input = getScannerForFile(filePath);
+		if (input == null)
+			return;
 
 		String cname;
 		cname = file.getName().replaceAll("\\.jls~$", "");
@@ -1382,6 +1386,8 @@ public class JLSStart extends JFrame implements ChangeListener {
 			return;
 		
 		Scanner input = getScannerForFile(chooser.getSelectedFile().getAbsolutePath());
+		if (input == null)
+			return;
 
 		// create new circuit
 		Circuit circ = new Circuit(chooser.getSelectedFile().getName().trim().replaceAll("\\.jls$",""));
