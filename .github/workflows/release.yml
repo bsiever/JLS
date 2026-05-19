@@ -130,17 +130,12 @@ jobs:
           security set-key-partition-list \
             -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 
-      - name: Build macOS app image
+      - name: Build macOS app image (unsigned)
         working-directory: releases/macOS
-        env:
-          HAS_CERT: ${{ env.HAS_CERT }}
         run: |
-          SIGN_ARGS=()
-          if [ "$HAS_CERT" = "true" ]; then
-            # Import step placed one cert in the temp keychain; jpackage picks it up automatically
-            SIGN_ARGS+=(--mac-sign)
-          fi
-
+          # Build without --mac-sign: jpackage's signing doesn't pass
+          # --options runtime to codesign, producing invalid signatures
+          # that Apple's notary service rejects. We sign manually below.
           jpackage \
             --type app-image \
             --app-version "${{ needs.build-jar.outputs.version }}" \
@@ -154,11 +149,32 @@ jobs:
             --input contents \
             --main-jar JLS.jar \
             --main-class jls.JLS \
-            --mac-app-category education \
-            --mac-entitlements JLS.entitlements \
-            "${SIGN_ARGS[@]}"
+            --mac-app-category education
 
-          zip -r JLS_macOS.zip JLS.app
+      - name: Sign macOS app with hardened runtime
+        if: env.HAS_CERT == 'true'
+        working-directory: releases/macOS
+        run: |
+          SIGNING_IDENTITY=$(security find-identity -v -p codesigning \
+            "$RUNNER_TEMP/build.keychain" \
+            | grep "Developer ID Application" | head -1 | sed 's/.*"\(.*\)"/\1/')
+          echo "Signing with: $SIGNING_IDENTITY"
+
+          # --deep re-signs all nested binaries and dylibs in one pass.
+          # --options runtime enables the hardened runtime (required for notarization).
+          # --timestamp embeds a secure timestamp (also required for notarization).
+          # --entitlements grants the JVM exceptions it needs under hardened runtime.
+          codesign --force --deep --options runtime \
+            --entitlements JLS.entitlements \
+            --sign "$SIGNING_IDENTITY" \
+            --timestamp \
+            JLS.app
+
+          codesign --verify --deep --strict --verbose=2 JLS.app
+
+      - name: Zip macOS app
+        working-directory: releases/macOS
+        run: zip -r JLS_macOS.zip JLS.app
 
       - name: Notarize and staple macOS app
         # Requires signing to have run first (HAS_CERT) and Apple credentials (HAS_NOTARIZE)
