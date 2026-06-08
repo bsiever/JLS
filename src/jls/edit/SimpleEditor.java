@@ -2837,11 +2837,15 @@ public abstract class SimpleEditor extends JPanel {
 				}
 			}*/
 
+						untouchAll(); // may have moved and stopped touching
 
 						// check every element in the selected set
 						for (Element sel : selected) {
 
-							// check against every element in the circuit
+							// only one element and selected element need to be intersecting to cause a problem
+							boolean anyIntersection = false;
+
+							// check against every unselected element in the circuit
 							for (Element el : circuit.getElements()) {
 
 								// ignore elements in the selected set
@@ -2850,6 +2854,7 @@ public abstract class SimpleEditor extends JPanel {
 
 								// check simple overlap of areas
 								if (sel.intersects(el)) {
+									anyIntersection = true;
 
 									// no overlap if possible connection,
 									boolean ok = false;
@@ -2925,15 +2930,13 @@ public abstract class SimpleEditor extends JPanel {
 									}
 
 									// selected is not a wire end
-									else {
+									// if not a wire end, ignore
+									else if (el instanceof WireEnd) {
+
+										WireEnd end = (WireEnd)el;
 
 										// put to wire end
 										for (Put put : sel.getAllPuts()) {
-
-											// if not a wire end, ignore
-											if (!(el instanceof WireEnd))
-												continue;
-											WireEnd end = (WireEnd)el;
 
 											// if don't line up, ignore
 											if (put.getX() != end.getX() || put.getY() != end.getY()) {
@@ -2971,52 +2974,59 @@ public abstract class SimpleEditor extends JPanel {
 										return true;
 									}
 								}
+							}
 
-								// no intersection, but wires may be overlapping wire ends
-								// or puts might line up
-								else {
+							// no intersection, but wires may be overlapping wire ends
+							// or puts might line up
+							if (!anyIntersection) {
 
-									// see if wires connected to a wire end dragged onto wire ends
-									if (sel instanceof WireEnd) {
-										WireEnd end = (WireEnd)sel;
-										for (Wire wire : end.getWires()) {
-											for (Element elm : circuit.getElements()) {
-												if (sel == elm)
-													continue;
-												if (!(elm instanceof WireEnd)) {
-													continue;
-												}
-												WireEnd otherEnd = (WireEnd)elm;
-												if (wire.touches(otherEnd)) {
-													overlapMessage = "overlap";
-													untouchAll();
-													return true;
-												}
+								// see if wires connected to a wire end dragged onto wire ends
+								if (sel instanceof WireEnd) {
+									WireEnd end = (WireEnd)sel;
+									for (Wire wire : end.getWires()) {
+										for (Element el : circuit.getElements()) {
+											if (sel == el)
+												continue;
+											if (!(el instanceof WireEnd)) {
+												continue;
+											}
+											WireEnd otherEnd = (WireEnd)el;
+											if (wire.touches(otherEnd)) {
+												overlapMessage = "overlap";
+												untouchAll();
+												return true;
 											}
 										}
 									}
+								}
 
-									// see if wires connected to puts dragged onto wire ends
-									for (Put p : sel.getAllPuts()) {
-										if (p.isAttached()) {
-											Wire wire = p.getWireEnd().getOnlyWire();
-											for (Element elm : circuit.getElements()) {
-												if (sel == elm)
-													continue;
-												if (!(elm instanceof WireEnd)) {
-													continue;
-												}
-												WireEnd otherEnd = (WireEnd)elm;
-												if (wire.touches(otherEnd)) {
-													overlapMessage = "overlap";
-													untouchAll();
-													return true;
-												}
+								// see if wires connected to puts dragged onto wire ends
+								for (Put p : sel.getAllPuts()) {
+									if (p.isAttached()) {
+										Wire wire = p.getWireEnd().getOnlyWire();
+										for (Element el : circuit.getElements()) {
+											if (sel == el)
+												continue;
+											if (!(el instanceof WireEnd)) {
+												continue;
+											}
+											WireEnd otherEnd = (WireEnd)el;
+											if (wire.touches(otherEnd)) {
+												overlapMessage = "overlap";
+												untouchAll();
+												return true;
 											}
 										}
 									}
+								}
 
-									// check all put combinations
+								// check all put combinations
+								for (Element el : circuit.getElements()) {
+
+									// ignore elements in the selected set
+									if (selected.contains(el))
+										continue;
+
 									for (Put p1 : sel.getAllPuts()) {
 										for (Put p2 : el.getAllPuts()) {
 
