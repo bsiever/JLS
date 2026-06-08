@@ -114,6 +114,26 @@ public class Element {
 
 		return y;
 	} // end of getY method
+
+	/**
+	 * Get width of this element.
+	 *
+	 * @return the width.
+	 */
+	public int getWidth() {
+
+		return width;
+	} // end of getWidth method
+
+	/**
+	 * Get height of this element.
+	 *
+	 * @return the height.
+	 */
+	public int getHeight() {
+
+		return height;
+	} // end of getHeight method
 	
 	/**
 	 * Get the trace position of this element.
@@ -327,6 +347,19 @@ public class Element {
 		Rectangle me = getRect();
 		return rect.contains(me);
 	} // end of isInside method
+
+	/**
+	 * See if this element is intersecting a given rectangle.
+	 *
+	 * @param rect The given rectangle.
+	 *
+	 * @return true if the element is intersecting, false if not.
+	 */
+	public boolean isOverlapping(Rectangle rect) {
+
+		Rectangle me = getRect();
+		return rect.intersects(me);
+	} // end of isOverlapping method
 
 	/**
 	 * Set/reset highlight.
