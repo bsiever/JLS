@@ -2845,7 +2845,7 @@ public abstract class SimpleEditor extends JPanel {
 							// only one element and selected element need to be intersecting to cause a problem
 							boolean anyIntersection = false;
 
-							// check against every unselected element in the circuit
+							// check against every element in the circuit
 							for (Element el : circuit.getElements()) {
 
 								// ignore elements in the selected set
