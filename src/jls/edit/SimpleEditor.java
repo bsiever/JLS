@@ -2842,7 +2842,7 @@ public abstract class SimpleEditor extends JPanel {
 						// check every element in the selected set
 						for (Element sel : selected) {
 
-							// only one element and selected element need to be intersecting to cause a problem
+							// only one element needs to be intersecting the selected element to count as overlap
 							boolean anyIntersection = false;
 
 							// check against every element in the circuit
